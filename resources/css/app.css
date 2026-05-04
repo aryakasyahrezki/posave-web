@@ -77,6 +77,23 @@
 }
 
 :root {
+    /* --success: #2E61E8; */
+    /* --success-background: rgba(46, 97, 232, 0.1); */
+    --success: #32843F;
+    --success-background: F2F9F4;
+    
+    --warning: #E75F1A;
+    --warning-background: #FEF5EE;
+    
+    --danger: #E94A4D;
+    --danger-background: #FEF0F0;
+
+    --category-color-1: #9F6FD5;
+    --category-bg-color-1: #FEF4E1;
+
+    --category-color-2: #FA9F16;
+    --category-bg-color-3: #F2EBFA;
+
     --background: hsl(0, 0%, 100%);
     --foreground: hsl(0, 0%, 3.9%);
     --card: hsl(0, 0%, 100%);

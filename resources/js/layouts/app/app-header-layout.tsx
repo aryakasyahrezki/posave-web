@@ -1,6 +1,4 @@
-import { AppContent } from '@/components/app-content';
-import { AppHeader } from '@/components/app-header';
-import { AppShell } from '@/components/app-shell';
+import { AppContent, AppHeader, AppShell } from '@/components';
 import { type BreadcrumbItem } from '@/types';
 
 interface AppHeaderLayoutProps {
@@ -8,7 +6,7 @@ interface AppHeaderLayoutProps {
     breadcrumbs?: BreadcrumbItem[];
 }
 
-export default function AppHeaderLayout({ children, breadcrumbs }: AppHeaderLayoutProps) {
+export function AppHeaderLayout({ children, breadcrumbs }: AppHeaderLayoutProps) {
     return (
         <AppShell>
             <AppHeader breadcrumbs={breadcrumbs} />

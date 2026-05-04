@@ -1,4 +1,4 @@
-import AppLayoutTemplate from '@/layouts/app/app-sidebar-layout';
+import { AppSidebarLayout } from '@/layouts';
 import { type BreadcrumbItem } from '@/types';
 
 interface AppLayoutProps {
@@ -6,8 +6,8 @@ interface AppLayoutProps {
     breadcrumbs?: BreadcrumbItem[];
 }
 
-export default ({ children, breadcrumbs, ...props }: AppLayoutProps) => (
-    <AppLayoutTemplate breadcrumbs={breadcrumbs} {...props}>
+export const AppLayout = ({ children, breadcrumbs, ...props }: AppLayoutProps) => (
+    <AppSidebarLayout breadcrumbs={breadcrumbs} {...props}>
         {children}
-    </AppLayoutTemplate>
+    </AppSidebarLayout>
 );

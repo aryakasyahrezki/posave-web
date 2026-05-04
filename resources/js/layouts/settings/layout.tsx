@@ -1,6 +1,4 @@
-import Heading from '@/components/heading';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
+import { Button, Heading, Separator } from '@/components';
 import { cn } from '@/lib/utils';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
@@ -23,7 +21,7 @@ const sidebarNavItems: NavItem[] = [
     },
 ];
 
-export default function SettingsLayout({ children }: { children: React.ReactNode }) {
+export function SettingsLayout({ children }: { children: React.ReactNode }) {
     const currentPath = window.location.pathname;
 
     return (
