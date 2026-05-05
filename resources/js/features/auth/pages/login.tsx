@@ -6,10 +6,10 @@ import { Button, Checkbox, Input, InputError, Label, TextLink } from '@/componen
 import { AuthLayout } from '@/layouts';
 
 interface LoginForm {
-    [key: string]: any;
+    [key: string]: string | boolean;
     email: string;
     password: string;
-    remember: boolean;
+    remember: boolean;  
 }
 
 interface LoginProps {
