@@ -9,7 +9,7 @@ interface LoginForm {
     [key: string]: string | boolean;
     email: string;
     password: string;
-    remember: boolean;
+    remember: boolean;  
 }
 
 interface LoginProps {
