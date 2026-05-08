@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Faq\FaqController;
 use App\Http\Controllers\Inquiry\InquiryController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -10,6 +11,7 @@ Route::get('/', function () {
 
 Route::get('hubungi-kami', [InquiryController::class, 'index'])->name('contact-us');
 
+Route::get('faq', [FaqController::class, 'index'])->name('faq');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', function () {
