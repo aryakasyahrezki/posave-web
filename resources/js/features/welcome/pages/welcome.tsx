@@ -470,7 +470,6 @@ export default function Welcome() {
                                 slidesPerView: 1.12,
                             },
                         }}
-                        className="testimonial-swiper"
                     >
 
                         {testimonials.map((item: any) => (
