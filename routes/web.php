@@ -2,10 +2,13 @@
 
 use App\Http\Controllers\Inquiry\InquiryController;
 use Illuminate\Support\Facades\Route;
+use App\Models\Testimonial;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('welcome/welcome');
+    return Inertia::render('welcome/welcome', [
+        'testimonials' => Testimonial::all(),
+    ]);
 })->name('home');
 
 Route::get('hubungi-kami', [InquiryController::class, 'index'])->name('contact-us');
