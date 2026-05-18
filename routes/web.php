@@ -10,6 +10,10 @@ Route::get('/', function () {
 
 Route::get('hubungi-kami', [InquiryController::class, 'index'])->name('contact-us');
 
+Route::get('/layanan', function () {
+    return Inertia::render('services/services');
+});
+
 Route::get('artikel', function () {
     return Inertia::render('blog/blog');
 })->name('artikel.index');
