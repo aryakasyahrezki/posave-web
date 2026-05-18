@@ -28,10 +28,10 @@ interface Props {
 
 function AccordionItem({ faq, isOpen, onToggle }: { faq: FaqItem; isOpen: boolean; onToggle: () => void }) {
     return (
-        <div className="overflow-hidden rounded-xl border border-[#1d3a5e]">
+        <div className="border-primary overflow-hidden rounded-xl border">
             <button
                 onClick={onToggle}
-                className="flex w-full items-center justify-between bg-[#1e3a5f] px-5 py-4 text-left text-white transition-colors hover:bg-[#1a3355]"
+                className="bg-primary hover:bg-accent flex w-full items-center justify-between px-5 py-4 text-left text-white transition-colors"
             >
                 <span className="pr-4 text-sm font-medium">{faq.question}</span>
                 <svg
@@ -47,7 +47,7 @@ function AccordionItem({ faq, isOpen, onToggle }: { faq: FaqItem; isOpen: boolea
             {/* Smooth accordion animation pakai CSS grid trick */}
             <div className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
                 <div className="overflow-hidden">
-                    <p className="bg-[#162d4a] px-5 py-4 text-sm leading-relaxed text-blue-200">{faq.answer}</p>
+                    <p className="bg-primary px-5 py-4 text-sm leading-relaxed text-white">{faq.answer}</p>
                 </div>
             </div>
         </div>
@@ -76,11 +76,9 @@ export default function Faq({ categories, faqs }: Props) {
             <Head title="FAQ - Posave" />
 
             {/* Hero */}
-
-            <section className="relative min-h-[280px] overflow-hidden bg-gradient-to-br from-gray-900 via-[#0f2744] to-gray-900">
-                {/* Overlay gelap dari kiri supaya teks tetap terbaca */}
-                <div className="absolute inset-0 z-10 bg-gradient-to-r from-gray-900/95 via-gray-900/70 to-transparent" />
-
+            <section className="via-primary relative mt-6 min-h-[280px] overflow-hidden rounded-t-2xl bg-gradient-to-br from-gray-900 to-gray-900 p-8">
+                {/* Overlay putih dari bawah supaya teks tetap terbaca */}
+                <div className="absolute inset-0 z-10 bg-gradient-to-t from-white to-transparent to-50%" />{' '}
                 {/* ↓ FOTO HERO — ganti src dengan path foto kamu */}
                 <img
                     src="assets/faq/faq_hero.png"
@@ -91,7 +89,6 @@ export default function Faq({ categories, faqs }: Props) {
                         (e.target as HTMLImageElement).style.display = 'none';
                     }}
                 />
-
                 {/* Teks hero */}
                 <div className="relative z-20 flex min-h-[280px] items-center px-8 py-16 md:px-16">
                     <div>
@@ -105,24 +102,24 @@ export default function Faq({ categories, faqs }: Props) {
             </section>
 
             {/* FAQ Section */}
-            <section className="px-4 py-16">
+            <section className="mt-8">
                 <div className="mx-auto max-w-5xl">
                     {/* Heading */}
                     <div className="mb-12 text-center">
-                        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">Frequently Asked Question</h2>
-                        <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Pertanyaan yang sudah terjawab</p>
+                        <h2 className="text-3xl font-bold text-black dark:text-white">Frequently Asked Question</h2>
+                        <p className="text-med mt-2 text-gray-500 dark:text-gray-400">Pertanyaan yang sudah terjawab</p>
                     </div>
 
-                    <div className="flex flex-col gap-8 md:flex-row">
+                    <div className="flex flex-col gap-4 md:flex-row">
                         {/* Category sidebar  */}
-                        <div className="flex flex-row flex-wrap gap-2 md:w-40 md:flex-col md:flex-nowrap">
+                        <div className="flex flex-row flex-wrap gap-2 rounded-xl p-3 md:w-45 md:flex-col md:flex-nowrap">
                             {categories.map((cat) => (
                                 <button
                                     key={cat.id}
                                     onClick={() => handleCategoryChange(cat.id)}
                                     className={`rounded-lg px-4 py-2.5 text-left text-sm font-medium transition-all duration-200 ${
                                         activeCategory === cat.id
-                                            ? 'bg-[#1e3a5f] text-white shadow-sm'
+                                            ? 'bg-primary text-white shadow-sm'
                                             : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
                                     }`}
                                 >
@@ -132,9 +129,9 @@ export default function Faq({ categories, faqs }: Props) {
                         </div>
 
                         {/* Accordion */}
-                        <div className="flex flex-1 flex-col gap-3">
+                        <div className="flex flex-1 flex-col gap-3 pt-3">
                             {filteredFaqs.length === 0 ? (
-                                <div className="flex flex-col items-center justify-center py-16 text-center">
+                                <div className="flex flex-col items-center justify-center py-16 text-center ">
                                     <svg className="mb-4 h-10 w-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path
                                             strokeLinecap="round"
@@ -156,14 +153,14 @@ export default function Faq({ categories, faqs }: Props) {
             </section>
 
             {/* CTA Section */}
-            <section className="px-4 pb-20">
+            <section className="px-8 py-8">
                 <div className="mx-auto max-w-2xl">
-                    <div className="rounded-3xl bg-gray-900 px-8 py-12 text-center dark:bg-slate-800">
-                        <h3 className="text-xl font-semibold text-white">Pertanyaanmu belum terjawab?</h3>
-                        <p className="mt-2 text-sm text-gray-400">Kontak kami melalui tombol dibawah ini</p>
+                    <div className="rounded-full bg-gray-900 px-24 py-12 text-center dark:bg-slate-800">
+                        <h3 className="text-2xl font-semibold text-white">Pertanyaanmu belum terjawab?</h3>
+                        <p className="text-med mt-2 text-gray-300">Kontak kami melalui tombol dibawah ini</p>
                         <Link
                             href="/contact"
-                            className="mt-8 inline-block rounded-full bg-white px-8 py-2.5 text-sm font-medium text-gray-900 transition-colors hover:bg-gray-100"
+                            className="text-accent-900 mt-8 inline-block rounded-full bg-white px-8 py-2.5 text-sm font-medium transition-colors hover:bg-gray-200"
                         >
                             Hubungi Kami
                         </Link>
