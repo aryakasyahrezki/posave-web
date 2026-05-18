@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Inquiry\InquiryController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Testimonial;
@@ -11,8 +12,26 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
-Route::get('hubungi-kami', [InquiryController::class, 'index'])->name('contact-us');
+Route::controller(InquiryController::class)
+    ->prefix('hubungi-kami')
+    ->name('contact-us.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
+    });
 
+Route::get('/layanan', function () {
+    return Inertia::render('services/services');
+})->name('service.index');
+
+Route::controller(BlogController::class)
+    ->prefix('artikel')
+    ->name('artikel.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/semua', 'all')->name('all');
+        Route::get('/{id}', 'show')->name('show');
+    });
 
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', function () {
