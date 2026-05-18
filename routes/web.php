@@ -10,6 +10,20 @@ Route::get('/', function () {
 
 Route::get('hubungi-kami', [InquiryController::class, 'index'])->name('contact-us');
 
+Route::get('artikel', function () {
+    return Inertia::render('blog/blog');
+})->name('artikel.index');
+
+Route::get('/artikel/semua', function () {
+    return Inertia::render('blog/all-articles');
+});
+
+Route::get('/artikel/{id}', function ($id) {
+    // Kita mengirimkan variabel 'id' dari URL ke React sebagai properti 'articleId'
+    return Inertia::render('blog/detail', [
+        'articleId' => $id
+    ]);
+});
 
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', function () {
