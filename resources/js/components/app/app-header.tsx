@@ -21,11 +21,18 @@ interface AppHeaderProps {
 export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
     const page = usePage<SharedData>();
     const { auth } = page.props;
+
+    const currentUrl = page.url;
+
+    const isActive = (url: string) => {
+        return currentUrl.startsWith(url);
+    };
+
     const getInitials = useInitials();
 
     return (
         <>
-            <div className="w-full max-w-7xl px-8 pt-4 md:px-16 mx-auto">
+            <div className="mx-auto w-full max-w-7xl px-8 pt-4 md:px-16">
                 <div className="flex h-16 w-full items-center justify-between rounded-full bg-[#F2F3F5] px-6 shadow-sm">
                     <div className="flex items-center gap-4">
                         <div className="lg:hidden">
@@ -43,7 +50,13 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                                     <div className="mt-6 flex h-full flex-1 flex-col space-y-4">
                                         <div className="flex flex-col space-y-4 text-sm">
                                             {mainNavItems.map((item) => (
-                                                <Link key={item.title} href={item.url} className="font-medium hover:text-slate-600">
+                                                <Link
+                                                    key={item.title}
+                                                    href={item.url}
+                                                    className={`font-medium transition-colors ${
+                                                        isActive(item.url) ? 'font-semibold text-[#253342]' : 'hover:text-slate-600'
+                                                    }`}
+                                                >
                                                     {item.title}
                                                 </Link>
                                             ))}
@@ -61,13 +74,19 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                     {/* --- TENGAH: MENU DESKTOP --- */}
                     <div className="hidden flex-1 items-center justify-center space-x-8 text-sm font-medium text-slate-800 lg:flex">
                         {mainNavItems.map((item) => (
-                            <Link key={item.title} href={item.url} className="transition-colors hover:text-slate-500">
+                            <Link
+                                key={item.title}
+                                href={item.url}
+                                className={`transition-colors ${
+                                    isActive(item.url) ? 'font-semibold text-[#253342]' : 'text-slate-700 hover:text-slate-500'
+                                }`}
+                            >
                                 {item.title}
                             </Link>
                         ))}
                     </div>
 
-                    <div className="hidden lg:flex items-center space-x-4">
+                    <div className="hidden items-center space-x-4 lg:flex">
                         {auth.user ? (
                             <div className="flex items-center space-x-3">
                                 <Button
