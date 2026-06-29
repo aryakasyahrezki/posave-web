@@ -49,7 +49,7 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                         const hasActiveChild = item.children?.some((child) => isItemActive(child)) ?? false;
 
                         // ========================================
-                        // COLLAPSED MODE → FLOATING DROPDOWN
+                        // COLLAPSED MODE
                         // ========================================
 
                         if (item.children && isCollapsed) {
@@ -57,7 +57,11 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                                 <SidebarMenuItem key={item.title}>
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
-                                            <SidebarMenuButton tooltip={item.title} isActive={hasActiveChild}>
+                                            <SidebarMenuButton
+                                                tooltip={item.title}
+                                                isActive={hasActiveChild}
+                                                className="!text-[var(--white)] hover:!bg-[var(--second-accent)] hover:!text-[var(--primary-900)] data-[active=true]:!bg-[var(--second-accent)] data-[active=true]:!text-[var(--primary-900)] [&_svg]:!text-[var(--white)] hover:[&_svg]:!text-[var(--primary-900)] data-[active=true]:[&_svg]:!text-[var(--primary-900)]"
+                                            >
                                                 {item.icon && <item.icon />}
                                             </SidebarMenuButton>
                                         </DropdownMenuTrigger>
@@ -83,7 +87,7 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                         }
 
                         // ========================================
-                        // EXPANDED MODE → COLLAPSIBLE
+                        // EXPANDED MODE
                         // ========================================
 
                         if (item.children) {
@@ -91,7 +95,11 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                                 <Collapsible key={item.title} defaultOpen={hasActiveChild}>
                                     <SidebarMenuItem>
                                         <CollapsibleTrigger asChild>
-                                            <SidebarMenuButton tooltip={item.title} isActive={hasActiveChild}>
+                                            <SidebarMenuButton
+                                                tooltip={item.title}
+                                                isActive={hasActiveChild}
+                                                className="!text-[var(--white)] hover:!bg-[var(--second-accent)] hover:!text-[var(--primary-900)] data-[active=true]:!bg-[var(--second-accent)] data-[active=true]:!text-[var(--primary-900)] [&_svg]:!text-[var(--white)] hover:[&_svg]:!text-[var(--primary-900)] data-[active=true]:[&_svg]:!text-[var(--primary-900)]"
+                                            >
                                                 {item.icon && <item.icon />}
 
                                                 <span>{item.title}</span>
@@ -101,7 +109,7 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                                         </CollapsibleTrigger>
 
                                         <CollapsibleContent>
-                                            <div className="mt-1 ml-8 flex flex-col gap-1 border-l pl-4">
+                                            <div className="mt-1 ml-8 flex flex-col gap-1 border-l border-slate-600 pl-4">
                                                 {item.children.map((child) => {
                                                     const isChildActive = isItemActive(child);
 
@@ -110,7 +118,9 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                                                             key={child.title}
                                                             href={getHref(child)}
                                                             className={`rounded-md px-3 py-2 text-sm transition ${
-                                                                isChildActive ? 'bg-muted text-primary font-medium' : 'hover:bg-muted'
+                                                                isChildActive
+                                                                    ? '!bg-[var(--second-accent)] font-medium !text-[var(--primary-900)]'
+                                                                    : '!text-[var(--white)] hover:!bg-[var(--second-accent)] hover:!text-[var(--primary-900)]'
                                                             }`}
                                                         >
                                                             {child.title}
@@ -130,8 +140,16 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
 
                         return (
                             <SidebarMenuItem key={item.title}>
-                                <SidebarMenuButton asChild isActive={isActive} tooltip={item.title}>
-                                    <Link href={getHref(item)}>
+                                <SidebarMenuButton
+                                    asChild
+                                    isActive={isActive}
+                                    tooltip={item.title}
+                                    className="!text-[var(--white)] hover:!bg-[var(--second-accent)] hover:!text-[var(--primary-900)] data-[active=true]:!bg-[var(--second-accent)] data-[active=true]:!text-[var(--primary-900)] [&_svg]:!text-[var(--white)] hover:[&_svg]:!text-[var(--primary-900)] data-[active=true]:[&_svg]:!text-[var(--primary-900)]"
+                                >
+                                    <Link
+                                        href={getHref(item)}
+                                        className="flex w-full items-center gap-2 !text-[var(--white)] hover:!text-[var(--primary-900)]"
+                                    >
                                         {item.icon && <item.icon />}
 
                                         <span>{item.title}</span>
