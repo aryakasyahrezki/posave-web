@@ -1,29 +1,28 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Advance\Owner\Inventory;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class BlogController extends Controller
+class InventoryCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return Inertia::render('blog/blog');
-    }
-
-    public function all()
-    {
-        return Inertia::render('blog/all-articles');
+        return Inertia::render('advance/owner/inventory/inventory-category');
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create() {}
+    public function create()
+    {
+        //
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -38,9 +37,7 @@ class BlogController extends Controller
      */
     public function show(string $id)
     {
-        return Inertia::render('blog/detail', [
-            'articleId' => $id
-        ]);
+        //
     }
 
     /**

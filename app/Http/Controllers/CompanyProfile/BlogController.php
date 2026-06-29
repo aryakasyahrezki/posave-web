@@ -1,40 +1,30 @@
 <?php
 
-namespace App\Http\Controllers\Faq;
+namespace App\Http\Controllers\CompanyProfile;
 
 use App\Http\Controllers\Controller;
-use Inertia\Response;
-use App\Models\Faq;
-use App\Models\FaqCategory;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class FaqController extends Controller
+class BlogController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index()
     {
-        $categories = FaqCategory::orderBy('sort_order')->get();
+        return Inertia::render('company-profile/blog/blog');
+    }
 
-        $faqs = Faq::where('is_active', true)
-            ->orderBy('sort_order')
-            ->get();
-
-        return Inertia::render('faq/faq', [
-            'categories' => $categories,
-            'faqs'       => $faqs,
-        ]);
+    public function all()
+    {
+        return Inertia::render('company-profile/blog/all-articles');
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
-    }
+    public function create() {}
 
     /**
      * Store a newly created resource in storage.
@@ -47,12 +37,17 @@ class FaqController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show() {}
+    public function show(string $id)
+    {
+        return Inertia::render('blog/detail', [
+            'articleId' => $id
+        ]);
+    }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Faq $faq)
+    public function edit(string $id)
     {
         //
     }
@@ -60,7 +55,7 @@ class FaqController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Faq $faq)
+    public function update(Request $request, string $id)
     {
         //
     }
@@ -68,7 +63,7 @@ class FaqController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Faq $faq)
+    public function destroy(string $id)
     {
         //
     }

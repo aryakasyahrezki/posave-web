@@ -79,6 +79,7 @@
     /* --success: #2E61E8; */
     /* --success-background: rgba(46, 97, 232, 0.1); */
 
+    /* ─── Raw palette (konstanta, tidak berubah antar mode) ─── */
     --black: #000000;
     --white: #f4f4f4;
     --neutral-white: #ffffff;
@@ -101,21 +102,27 @@
     --accent-600: #659dc2;
     --accent-500: #3c79a4;
 
-    --grey-text: #707170;
-    --sidebar: #22303f;
-    --header: #22303f;
-    --subheading: #546272;
-    --second-accent: #e7e8e7;
-    --text-light: #fbfbfb;
+    /* ─── Semantic tokens — light mode ─── */
+    --grey-text: var(--primary-600); /* #394f67 */
+    --grey-text-muted: var(--primary-500); /* #415a75 */
+    --sidebar: var(--primary-900);
+    --header: var(--primary-900);
+    --subheading: var(--primary-800); /* #2a3a4c */
+    --second-accent: #f1f5f9; /* slate-100 */
+    --page-bg: rgba(248, 250, 252, 0.5); /* slate-50/50 — match bg-slate-50/50 asli */
+    --surface-badge: #e2e8f0; /* slate-200 */
+    --surface-header: var(--primary-900); /* #22303f — header tabel & btn utama */
+    --surface-header-hover: var(--primary-800); /* #2a3a4c */
+    --text-light: #ffffff; /* putih murni untuk teks di atas bg gelap */
 
-    --success: #32843f;
-    --success-background: F2F9F4;
+    --success: #16a34a; /* green-600 */
+    --success-background: #dcfce7; /* green-100 */
 
     --warning: #e75f1a;
     --warning-background: #fef5ee;
 
-    --danger: #e94a4d;
-    --danger-background: #fef0f0;
+    --danger: #ef4444; /* red-500 */
+    --danger-background: #fee2e2; /* red-100 */
 
     --category-color-1: #9f6fd5;
     --category-bg-color-1: #fef4e1;
@@ -123,6 +130,15 @@
     --category-color-2: #fa9f16;
     --category-bg-color-3: #f2ebfa;
 
+    /* Pemasukan icon — blue */
+    --income-icon-bg: #dbeafe; /* blue-100 */
+    --income-icon-text: #2563eb; /* blue-600 */
+
+    /* Testimonial swiper dots */
+    --dot-base: var(--primary-900);
+    --dot-active: var(--accent-700);
+
+    /* ─── shadcn/ui tokens — light mode ─── */
     --background: hsl(0, 0%, 100%);
     --foreground: hsl(0, 0%, 3.9%);
     --card: hsl(0, 0%, 100%);
@@ -139,7 +155,8 @@
     --accent-foreground: hsl(0, 0%, 9%);
     --destructive: hsl(0, 84.2%, 60.2%);
     --destructive-foreground: hsl(0, 0%, 98%);
-    --border: hsl(0, 0%, 92.8%);
+    --border: hsl(0, 0%, 89.8%); /* slate-200 ~#e2e8f0 */
+    --border-strong: #cbd5e1; /* slate-300 */
     --input: hsl(0, 0%, 89.8%);
     --ring: hsl(0, 0%, 3.9%);
     --chart-1: hsl(12, 76%, 61%);
@@ -159,6 +176,40 @@
 }
 
 .dark {
+    /* ─── Semantic tokens — dark mode override ─── */
+    --grey-text: var(--accent-800); /* #a9cee6 — cukup terang di dark */
+    --grey-text-muted: var(--accent-900); /* #c9e1f0 — lebih muted */
+    --subheading: var(--accent-900); /* #c9e1f0 — teks utama di dark */
+    --second-accent: var(--primary-800); /* #2a3a4c — bg subtle di dark */
+    --page-bg: rgba(34, 48, 63, 0.5); /* primary-900/50 */
+    --surface-badge: var(--primary-700); /* #31455a */
+    --surface-header: var(--primary-900); /* #22303f */
+    --surface-header-hover: var(--primary-800); /* #2a3a4c */
+    --text-light: #ffffff;
+
+    --success: #4ade80;
+    --success-background: #052e16;
+
+    --warning: #fb923c;
+    --warning-background: #431407;
+
+    --danger: #f87171;
+    --danger-background: #450a0a;
+
+    --category-color-1: #c084fc;
+    --category-bg-color-1: #2d1a4a;
+
+    --category-color-2: #fbbf24;
+    --category-bg-color-3: #1e1030;
+
+    --income-icon-bg: #1e3a5f;
+    --income-icon-text: #60a5fa;
+
+    /* Testimonial swiper dots */
+    --dot-base: var(--accent-800);
+    --dot-active: var(--secondary-500);
+
+    /* ─── shadcn/ui tokens — dark mode ─── */
     --background: hsl(0, 0%, 3.9%);
     --foreground: hsl(0, 0%, 98%);
     --card: hsl(0, 0%, 3.9%);
@@ -176,6 +227,7 @@
     --destructive: hsl(0, 84%, 60%);
     --destructive-foreground: hsl(0, 0%, 98%);
     --border: hsl(0, 0%, 14.9%);
+    --border-strong: hsl(0, 0%, 20%);
     --input: hsl(0, 0%, 14.9%);
     --ring: hsl(0, 0%, 83.1%);
     --chart-1: hsl(220, 70%, 50%);
@@ -191,8 +243,6 @@
     --sidebar-accent-foreground: hsl(240, 4.8%, 95.9%);
     --sidebar-border: hsl(0, 0%, 15.9%);
     --sidebar-ring: hsl(217.2, 91.2%, 59.8%);
-
-    
 }
 
 .testimonial-swiper {
@@ -215,7 +265,7 @@
     width: 10px;
     height: 10px;
     border-radius: 999px;
-    background: #1d2c3d;
+    background: var(--dot-base);
     opacity: 0.35;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -223,7 +273,7 @@
 
 .custom-dot-active {
     opacity: 1;
-    background: #7fb6da;
+    background: var(--dot-active);
 }
 
 @layer base {

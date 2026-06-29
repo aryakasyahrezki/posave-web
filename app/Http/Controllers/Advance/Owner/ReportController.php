@@ -1,20 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Inquiry;
+namespace App\Http\Controllers\Advance\Owner;
 
 use App\Http\Controllers\Controller;
-use App\Models\Inquiry;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
-class InquiryController extends Controller
+class ReportController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return Inertia::render('inquiry/inquiry');
+        //
     }
 
     /**
@@ -36,7 +34,7 @@ class InquiryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Inquiry $inquiry)
+    public function show(string $id)
     {
         //
     }
@@ -44,7 +42,7 @@ class InquiryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Inquiry $inquiry)
+    public function edit(string $id)
     {
         //
     }
@@ -52,7 +50,7 @@ class InquiryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Inquiry $inquiry)
+    public function update(Request $request, string $id)
     {
         //
     }
@@ -60,7 +58,7 @@ class InquiryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Inquiry $inquiry)
+    public function destroy(string $id)
     {
         //
     }

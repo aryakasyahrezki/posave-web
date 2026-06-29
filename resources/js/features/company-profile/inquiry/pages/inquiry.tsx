@@ -26,7 +26,7 @@ export default function Inquiry() {
                             <span className="text-[#22303F]">Kami Ada Disini</span>
                         </h1>
                         <p className="mt-4 text-slate-600">
-                            Punya pertanyaan tentang POSIVE? <br />
+                            Punya pertanyaan tentang POSAVE? <br />
                             Tim kami selalu siap untuk membantu Anda!
                         </p>
                         <div className="mt-8 flex flex-wrap gap-4">
@@ -42,7 +42,7 @@ export default function Inquiry() {
 
                 {/* 2. BANNER FAQ (Tengah) */}
                 <div className="flex flex-col items-center justify-between rounded-2xl border border-neutral-100 bg-white p-6 shadow-sm md:flex-row md:px-12">
-                    <div className="flex flex-col sm:flex-row items-center gap-6">
+                    <div className="flex flex-col items-center gap-6 sm:flex-row">
                         <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-50 text-[#22303F]">
                             <HelpCircle className="h-8 w-8" />
                         </div>
@@ -85,7 +85,7 @@ export default function Inquiry() {
                                 </div>
                                 <div>
                                     <h4 className="text-sm font-bold text-slate-800">Email</h4>
-                                    <p className="text-sm text-slate-600">support@posive.com</p>
+                                    <p className="text-sm text-slate-600">support@posave.com</p>
                                 </div>
                             </div>
                             <div className="flex items-start gap-4">
@@ -117,7 +117,7 @@ export default function Inquiry() {
 
                 {/* 4. BANNER BAWAH (Masih Butuh Bantuan) */}
                 <div className="mt-8 flex flex-col items-center justify-between rounded-2xl bg-blue-50/50 p-8 md:flex-row md:px-12">
-                    <div className="flex flex-col sm:flex-row items-center gap-6">
+                    <div className="flex flex-col items-center gap-6 sm:flex-row">
                         <Headphones className="h-10 w-10 text-[#22303F]" />
                         <div>
                             <h3 className="text-xl font-bold text-slate-800">Masih butuh bantuan?</h3>
