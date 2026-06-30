@@ -1,9 +1,9 @@
 import { ChatBody, ChatHeader, ChatHistory, ChatInput } from '@/features/chatbot/components';
-
-import { useChatbot } from '@/features/chatbot';
+import { useChatbot, useChatMessages } from '@/features/chatbot/hooks/';
 
 export function Chatbot() {
     const { isOpen, close } = useChatbot();
+    const { messages, isLoading, sendMessage } = useChatMessages();
 
     if (!isOpen) return null;
 
@@ -16,10 +16,8 @@ export function Chatbot() {
 
                 <div className="flex flex-1 flex-col">
                     <ChatHeader />
-
-                    <ChatBody />
-
-                    <ChatInput />
+                    <ChatBody messages={messages} isLoading={isLoading} />
+                    <ChatInput onSend={sendMessage} isLoading={isLoading} />
                 </div>
             </div>
         </>
