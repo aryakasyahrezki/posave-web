@@ -5,4 +5,11 @@ export interface Message {
 
 export interface ChatResponse {
     reply: string;
+    conversation_id: number;
+}
+
+export interface Conversation {
+    id: number;
+    title: string;
+    updated_at: string;
 }

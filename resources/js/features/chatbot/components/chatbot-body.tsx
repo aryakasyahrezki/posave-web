@@ -1,12 +1,22 @@
 import { Bot } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 import type { Message } from '../types';
 
 interface ChatBodyProps {
     messages: Message[];
-    isLoading: boolean;
+    isLoadingHistory: boolean;
+    isWaitingReply: boolean;
 }
 
-export function ChatBody({ messages, isLoading }: ChatBodyProps) {
+export function ChatBody({ messages, isLoadingHistory, isWaitingReply }: ChatBodyProps) {
+    if (isLoadingHistory) {
+        return (
+            <div className="flex flex-1 items-center justify-center">
+                <p className="text-slate-400">Memuat percakapan...</p>
+            </div>
+        );
+    }
+
     if (messages.length === 0) {
         return (
             <div className="flex flex-1 items-center justify-center">
@@ -32,12 +42,18 @@ export function ChatBody({ messages, isLoading }: ChatBodyProps) {
                             msg.role === 'user' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-900'
                         }`}
                     >
-                        {msg.content}
+                        {msg.role === 'assistant' ? (
+                            <div className="prose prose-sm prose-p:my-2 prose-ul:my-2 prose-ol:my-2 max-w-none">
+                                <ReactMarkdown>{msg.content}</ReactMarkdown>
+                            </div>
+                        ) : (
+                            msg.content
+                        )}
                     </div>
                 </div>
             ))}
 
-            {isLoading && (
+            {isWaitingReply && (
                 <div className="flex justify-start">
                     <div className="max-w-[70%] rounded-2xl bg-slate-100 px-4 py-2 text-slate-500">Mengetik...</div>
                 </div>

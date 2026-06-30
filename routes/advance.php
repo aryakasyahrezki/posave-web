@@ -27,14 +27,14 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
   });
 
   Route::prefix('employees')->name('employees.')->group(function () {
-    Route::resource('/', EmployeeController::class);
+    Route::resource('employees', EmployeeController::class);
   });
 
   Route::prefix('reports')->name('reports')->group(function () {
-    Route::resource('/', ReportController::class);
+    Route::resource('reports', ReportController::class);
   });
 
   Route::prefix('messages')->name('messages')->group(function () {
-    Route::resource('/', MessageController::class);
+    Route::resource('messages', MessageController::class);
   });
 });
