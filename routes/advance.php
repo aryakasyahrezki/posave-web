@@ -30,9 +30,7 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::resource('employees', EmployeeController::class);
   });
 
-  Route::prefix('reports')->name('reports')->group(function () {
-    Route::resource('reports', ReportController::class);
-  });
+  Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
 
   Route::prefix('messages')->name('messages')->group(function () {
     Route::resource('messages', MessageController::class);
