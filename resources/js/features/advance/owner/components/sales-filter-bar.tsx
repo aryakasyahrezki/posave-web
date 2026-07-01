@@ -25,6 +25,8 @@ interface Props {
     /** Param tambahan yang ingin dipertahankan saat filter berubah (mis. tab aktif). */
     extraParams?: Record<string, string>;
     onPrint?: () => void;
+    /** Tampilkan tombol Cetak. Di halaman Laporan tak diperlukan (export sudah menangani). */
+    showPrint?: boolean;
 }
 
 const RANGE_PRESETS: { value: string; label: string }[] = [
@@ -35,7 +37,7 @@ const RANGE_PRESETS: { value: string; label: string }[] = [
     { value: 'custom', label: 'Custom' },
 ];
 
-export function SalesFilterBar({ routeName, outlets, filters, extraParams = {}, onPrint }: Props) {
+export function SalesFilterBar({ routeName, outlets, filters, extraParams = {}, onPrint, showPrint = true }: Props) {
     const [from, setFrom] = useState(filters.from);
     const [to, setTo] = useState(filters.to);
 
@@ -121,14 +123,16 @@ export function SalesFilterBar({ routeName, outlets, filters, extraParams = {}, 
                 )}
             </div>
 
-            <Button
-                variant="outline"
-                onClick={onPrint ?? (() => window.print())}
-                className="h-10 w-full justify-center border-[var(--border)] bg-[var(--neutral-white)] text-[var(--subheading)] sm:w-auto"
-            >
-                <Printer className="mr-2 h-4 w-4" />
-                Cetak
-            </Button>
+            {showPrint && (
+                <Button
+                    variant="outline"
+                    onClick={onPrint ?? (() => window.print())}
+                    className="h-10 w-full justify-center border-[var(--border)] bg-[var(--neutral-white)] text-[var(--subheading)] sm:w-auto"
+                >
+                    <Printer className="mr-2 h-4 w-4" />
+                    Cetak
+                </Button>
+            )}
         </div>
     );
 }

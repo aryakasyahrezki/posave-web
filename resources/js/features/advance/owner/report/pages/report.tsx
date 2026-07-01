@@ -129,7 +129,7 @@ export default function Report({ filters, outlets, statement, productSales, cate
             <Head title="Laporan" />
 
             <div className="flex min-h-screen flex-col gap-6 bg-[var(--page-bg)] p-4 sm:p-6">
-                <SalesFilterBar routeName="dashboard.reports.index" outlets={outlets} filters={filters} />
+                <SalesFilterBar routeName="dashboard.reports.index" outlets={outlets} filters={filters} showPrint={false} />
 
                 <p className="-mt-2 text-xs text-[var(--grey-text)]">
                     Periode <span className="font-medium text-[var(--subheading)]">{filters.label}</span> · dibandingkan periode sebelumnya.
