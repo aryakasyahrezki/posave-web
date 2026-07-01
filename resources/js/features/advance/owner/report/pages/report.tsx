@@ -128,7 +128,7 @@ export default function Report({ filters, outlets, statement, productSales, cate
         <DashboardSidebarLayout title="Laporan" description="Lihat dan kelola ringkasan dari penjualan anda">
             <Head title="Laporan" />
 
-            <div className="flex min-h-screen flex-col gap-6 bg-[var(--page-bg)] p-6">
+            <div className="flex min-h-screen flex-col gap-6 bg-[var(--page-bg)] p-4 sm:p-6">
                 <SalesFilterBar routeName="dashboard.reports.index" outlets={outlets} filters={filters} />
 
                 <p className="-mt-2 text-xs text-[var(--grey-text)]">
@@ -180,7 +180,7 @@ function lineValue(line: Line): string {
 
 function StatementCard({ lines, note, report }: { lines: Line[]; note?: string; report: ReportExport }) {
     return (
-        <div className="rounded-2xl border border-[var(--border)] bg-[var(--neutral-white)] p-6 shadow-sm">
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--neutral-white)] p-4 shadow-sm sm:p-6">
             <div className="mb-4 flex items-start justify-between gap-3">
                 {note ? <p className="text-sm leading-relaxed text-[var(--grey-text)]">{note}</p> : <span />}
                 <ExportMenu onExport={(f) => runExport(f, report)} />

@@ -118,7 +118,7 @@ export default function Dashboard({ filters, outlets, kpis, salesTrend, hourlySa
         <DashboardSidebarLayout title="Dashboard" description="Kelola semua kebutuhan anda disini">
             <Head title="Dashboard" />
 
-            <div className="flex min-h-screen flex-col gap-6 bg-[var(--page-bg)] p-6">
+            <div className="flex min-h-screen flex-col gap-6 bg-[var(--page-bg)] p-4 sm:p-6">
                 <SalesFilterBar routeName="dashboard.index" outlets={outlets} filters={filters} onPrint={goToReports} />
 
                 <p className="-mt-2 text-xs text-[var(--grey-text)]">
@@ -126,7 +126,7 @@ export default function Dashboard({ filters, outlets, kpis, salesTrend, hourlySa
                 </p>
 
                 {/* KPI */}
-                <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-6">
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 xl:grid-cols-6">
                     <KpiCard icon={Wallet} label="Total Penjualan" value={formatRupiah(kpis.totalSales.value)} color="var(--success)" bg="var(--success-background)" delta={kpis.totalSales.deltaPct} />
                     <KpiCard icon={Receipt} label="Total Transaksi" value={formatNumber(kpis.totalTransactions.value)} color="var(--income-icon-text)" bg="var(--income-icon-bg)" delta={kpis.totalTransactions.deltaPct} />
                     <KpiCard icon={Boxes} label="Produk Terjual" value={formatNumber(kpis.productsSold.value)} suffix="Item" color="var(--warning)" bg="var(--warning-background)" delta={kpis.productsSold.deltaPct} />
@@ -137,7 +137,7 @@ export default function Dashboard({ filters, outlets, kpis, salesTrend, hourlySa
 
                 {/* Tren + kategori */}
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-                    <div className="rounded-2xl border border-[var(--border)] bg-[var(--neutral-white)] p-6 shadow-sm lg:col-span-8">
+                    <div className="rounded-2xl border border-[var(--border)] bg-[var(--neutral-white)] p-4 shadow-sm sm:p-6 lg:col-span-8">
                         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
                             <div>
                                 <div className="flex items-center gap-2">
@@ -167,7 +167,7 @@ export default function Dashboard({ filters, outlets, kpis, salesTrend, hourlySa
                         </div>
                     </div>
 
-                    <div className="rounded-2xl border border-[var(--border)] bg-[var(--neutral-white)] p-6 shadow-sm lg:col-span-4">
+                    <div className="rounded-2xl border border-[var(--border)] bg-[var(--neutral-white)] p-4 shadow-sm sm:p-6 lg:col-span-4">
                         <h3 className="mb-4 text-sm font-semibold text-[var(--subheading)]">Ringkasan Kategori</h3>
                         <CategoryDonut data={categorySummary} />
                     </div>
@@ -175,7 +175,7 @@ export default function Dashboard({ filters, outlets, kpis, salesTrend, hourlySa
 
                 {/* Jam ramai + metode pembayaran */}
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-                    <div className="rounded-2xl border border-[var(--border)] bg-[var(--neutral-white)] p-6 shadow-sm lg:col-span-8">
+                    <div className="rounded-2xl border border-[var(--border)] bg-[var(--neutral-white)] p-4 shadow-sm sm:p-6 lg:col-span-8">
                         <div className="mb-4 flex items-center gap-2">
                             <Clock className="h-4 w-4 text-[var(--grey-text)]" />
                             <h3 className="text-sm font-semibold text-[var(--subheading)]">Jam Ramai</h3>
@@ -184,7 +184,7 @@ export default function Dashboard({ filters, outlets, kpis, salesTrend, hourlySa
                         <HourlySalesChart data={hourlySales} />
                     </div>
 
-                    <div className="rounded-2xl border border-[var(--border)] bg-[var(--neutral-white)] p-6 shadow-sm lg:col-span-4">
+                    <div className="rounded-2xl border border-[var(--border)] bg-[var(--neutral-white)] p-4 shadow-sm sm:p-6 lg:col-span-4">
                         <div className="mb-4 flex items-center gap-2">
                             <CreditCard className="h-4 w-4 text-[var(--grey-text)]" />
                             <h3 className="text-sm font-semibold text-[var(--subheading)]">Metode Pembayaran</h3>
@@ -195,7 +195,7 @@ export default function Dashboard({ filters, outlets, kpis, salesTrend, hourlySa
 
                 {/* Produk terlaris + transaksi terbaru + aksi cepat */}
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-                    <div className="rounded-2xl border border-[var(--border)] bg-[var(--neutral-white)] p-6 shadow-sm lg:col-span-4">
+                    <div className="rounded-2xl border border-[var(--border)] bg-[var(--neutral-white)] p-4 shadow-sm sm:p-6 lg:col-span-4">
                         <h3 className="mb-4 text-sm font-semibold text-[var(--subheading)]">Produk Terlaris</h3>
                         {topProducts.length === 0 ? (
                             <p className="py-8 text-center text-sm text-[var(--grey-text)]">Belum ada data</p>
@@ -217,7 +217,7 @@ export default function Dashboard({ filters, outlets, kpis, salesTrend, hourlySa
                         )}
                     </div>
 
-                    <div className="rounded-2xl border border-[var(--border)] bg-[var(--neutral-white)] p-6 shadow-sm lg:col-span-4">
+                    <div className="rounded-2xl border border-[var(--border)] bg-[var(--neutral-white)] p-4 shadow-sm sm:p-6 lg:col-span-4">
                         <h3 className="mb-4 text-sm font-semibold text-[var(--subheading)]">Transaksi Terbaru</h3>
                         {recentTransactions.length === 0 ? (
                             <p className="py-8 text-center text-sm text-[var(--grey-text)]">Belum ada transaksi</p>
@@ -239,7 +239,7 @@ export default function Dashboard({ filters, outlets, kpis, salesTrend, hourlySa
                         )}
                     </div>
 
-                    <div className="rounded-2xl border border-[var(--border)] bg-[var(--neutral-white)] p-6 shadow-sm lg:col-span-4">
+                    <div className="rounded-2xl border border-[var(--border)] bg-[var(--neutral-white)] p-4 shadow-sm sm:p-6 lg:col-span-4">
                         <h3 className="mb-4 text-sm font-semibold text-[var(--subheading)]">Aksi Cepat</h3>
                         <div className="grid grid-cols-3 gap-3">
                             {QUICK_ACTIONS.map((action) => (

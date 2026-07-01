@@ -57,14 +57,14 @@ export function SalesFilterBar({ routeName, outlets, filters, extraParams = {}, 
     };
 
     return (
-        <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
                 {/* Outlet */}
                 <Select
                     value={filters.outlet_id ? String(filters.outlet_id) : 'all'}
                     onValueChange={(v) => visit({ outlet_id: v === 'all' ? null : Number(v) })}
                 >
-                    <SelectTrigger className="h-10 w-[200px] gap-2 rounded-lg border-transparent bg-[var(--second-accent)] font-medium text-[var(--subheading)] shadow-sm">
+                    <SelectTrigger className="h-10 w-full gap-2 rounded-lg border-transparent bg-[var(--second-accent)] font-medium text-[var(--subheading)] shadow-sm sm:w-[200px]">
                         <span className="!flex min-w-0 items-center gap-2">
                             <Store className="h-4 w-4 shrink-0 text-[var(--grey-text)]" />
                             <SelectValue placeholder="Semua Outlet" />
@@ -81,12 +81,12 @@ export function SalesFilterBar({ routeName, outlets, filters, extraParams = {}, 
                 </Select>
 
                 {/* Preset rentang tanggal */}
-                <div className="flex h-10 items-center rounded-md border border-[var(--border)] bg-[var(--neutral-white)] p-1 shadow-sm">
+                <div className="flex h-10 w-full items-center rounded-md border border-[var(--border)] bg-[var(--neutral-white)] p-1 shadow-sm sm:w-auto">
                     {RANGE_PRESETS.map((preset) => (
                         <button
                             key={preset.value}
                             onClick={() => visit({ range: preset.value })}
-                            className={`h-full rounded px-3 text-sm font-medium transition-colors ${
+                            className={`h-full flex-1 rounded px-2 text-sm font-medium whitespace-nowrap transition-colors sm:flex-none sm:px-3 ${
                                 filters.range === preset.value
                                     ? 'bg-[var(--surface-header)] text-[var(--text-light)]'
                                     : 'text-[var(--grey-text)] hover:bg-[var(--second-accent)]'
@@ -99,14 +99,14 @@ export function SalesFilterBar({ routeName, outlets, filters, extraParams = {}, 
 
                 {/* Input tanggal custom */}
                 {filters.range === 'custom' && (
-                    <div className="flex h-10 items-center gap-2 rounded-md border border-[var(--border)] bg-[var(--neutral-white)] px-3 shadow-sm">
+                    <div className="flex h-10 w-full items-center gap-2 rounded-md border border-[var(--border)] bg-[var(--neutral-white)] px-3 shadow-sm sm:w-auto">
                         <input
                             type="date"
                             value={from}
                             max={to}
                             onChange={(e) => setFrom(e.target.value)}
                             onBlur={() => visit({ range: 'custom', from })}
-                            className="bg-transparent text-sm text-[var(--subheading)] outline-none"
+                            className="min-w-0 flex-1 bg-transparent text-sm text-[var(--subheading)] outline-none sm:flex-none"
                         />
                         <span className="text-[var(--grey-text)]">–</span>
                         <input
@@ -115,7 +115,7 @@ export function SalesFilterBar({ routeName, outlets, filters, extraParams = {}, 
                             min={from}
                             onChange={(e) => setTo(e.target.value)}
                             onBlur={() => visit({ range: 'custom', to })}
-                            className="bg-transparent text-sm text-[var(--subheading)] outline-none"
+                            className="min-w-0 flex-1 bg-transparent text-sm text-[var(--subheading)] outline-none sm:flex-none"
                         />
                     </div>
                 )}
@@ -124,7 +124,7 @@ export function SalesFilterBar({ routeName, outlets, filters, extraParams = {}, 
             <Button
                 variant="outline"
                 onClick={onPrint ?? (() => window.print())}
-                className="h-10 border-[var(--border)] bg-[var(--neutral-white)] text-[var(--subheading)]"
+                className="h-10 w-full justify-center border-[var(--border)] bg-[var(--neutral-white)] text-[var(--subheading)] sm:w-auto"
             >
                 <Printer className="mr-2 h-4 w-4" />
                 Cetak
