@@ -9,9 +9,16 @@ export interface Employee {
     id: number;
     name: string;
     role: string;
-    branch: string;
+    branch_id: number | null;
+    branch: { id: number; name: string } | null;
     active_date: string;
     slot_status: string;
+    user?: { id: number; email: string };
+}
+
+interface Branch {
+    id: number;
+    name: string;
 }
 
 interface EmployeeListProps {
@@ -22,7 +29,7 @@ interface EmployeeListProps {
         to: number;
         links: { url: string | null; label: string; active: boolean }[];
     };
-    branches: string[];
+    branches: Branch[];
     filters: {
         branch?: string;
     };
@@ -39,7 +46,7 @@ export default function EmployeeList({ employees, branches, filters }: EmployeeL
     const editForm = useForm({
         name: '',
         role: '',
-        branch: '',
+        branch_id: '' as string | number,
         active_date: '',
         slot_status: '',
     });
@@ -52,10 +59,7 @@ export default function EmployeeList({ employees, branches, filters }: EmployeeL
         const btn = buttonRefs.current[id];
         if (btn) {
             const rect = btn.getBoundingClientRect();
-            setMenuPosition({
-                top: rect.bottom + window.scrollY + 4,
-                left: rect.right + window.scrollX - 144,
-            });
+            setMenuPosition({ top: rect.bottom + window.scrollY + 4, left: rect.right + window.scrollX - 144 });
         }
         setOpenMenuId(id);
     };
@@ -72,7 +76,7 @@ export default function EmployeeList({ employees, branches, filters }: EmployeeL
         editForm.setData({
             name: employee.name,
             role: employee.role,
-            branch: employee.branch,
+            branch_id: employee.branch_id ?? '',
             active_date: employee.active_date,
             slot_status: employee.slot_status,
         });
@@ -87,21 +91,18 @@ export default function EmployeeList({ employees, branches, filters }: EmployeeL
     const handleSubmitEdit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!editEmployee) return;
-
-        editForm.put(route('dashboard.employees.update', editEmployee.id), {
-            onSuccess: handleCloseEdit,
-        });
+        editForm.put(route('dashboard.employees.update', editEmployee.id), { onSuccess: handleCloseEdit });
     };
 
     const handleDelete = (id: number) => {
-        if (confirm('Yakin ingin menghapus karyawan ini?')) {
+        if (confirm('Yakin ingin menghapus karyawan ini? Akun login karyawan juga akan terhapus.')) {
             router.delete(route('dashboard.employees.destroy', id));
         }
         closeMenu();
     };
 
-    const handleFilterBranch = (branch: string) => {
-        router.get(route('dashboard.employees.index'), branch === 'all' ? {} : { branch }, {
+    const handleFilterBranch = (branchId: string) => {
+        router.get(route('dashboard.employees.index'), branchId === 'all' ? {} : { branch: branchId }, {
             preserveState: true,
             preserveScroll: true,
             replace: true,
@@ -110,9 +111,10 @@ export default function EmployeeList({ employees, branches, filters }: EmployeeL
     };
 
     const activeMenuEmployee = employees.data.find((e) => e.id === openMenuId);
+    const activeBranchName = branches.find((b) => String(b.id) === filters.branch)?.name;
 
     return (
-        <DashboardSidebarLayout title="Daftar Karyawan" description="kelola semua daftar karyawan anda">
+        <DashboardSidebarLayout title="Daftar Karyawan" description="Kelola semua daftar karyawan anda">
             <Head title="Daftar Karyawan" />
             <div className="min-h-screen bg-[var(--page-bg)] p-6">
                 <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
@@ -122,14 +124,13 @@ export default function EmployeeList({ employees, branches, filters }: EmployeeL
                             className="bg-[var(--second-accent)] text-[var(--subheading)]"
                             onClick={() => setOpenBranchFilter(!openBranchFilter)}
                         >
-                            {filters.branch ?? 'Semua Cabang'}
+                            {activeBranchName ?? 'Semua Cabang'}
                             <ChevronDown className="ml-2 h-4 w-4" />
                         </Button>
 
                         {openBranchFilter && (
                             <>
                                 <div className="fixed inset-0 z-40" onClick={() => setOpenBranchFilter(false)} />
-
                                 <div className="absolute top-full left-0 z-50 mt-1 w-48 overflow-hidden rounded-xl bg-[var(--neutral-white)] py-1 shadow-lg">
                                     <button
                                         onClick={() => handleFilterBranch('all')}
@@ -139,16 +140,17 @@ export default function EmployeeList({ employees, branches, filters }: EmployeeL
                                     >
                                         Semua Cabang
                                     </button>
-
                                     {branches.map((branch) => (
                                         <button
-                                            key={branch}
-                                            onClick={() => handleFilterBranch(branch)}
+                                            key={branch.id}
+                                            onClick={() => handleFilterBranch(String(branch.id))}
                                             className={`flex w-full items-center px-4 py-2.5 text-left text-sm hover:bg-[var(--surface-badge)] ${
-                                                filters.branch === branch ? 'font-semibold text-[var(--subheading)]' : 'text-[var(--grey-text)]'
+                                                filters.branch === String(branch.id)
+                                                    ? 'font-semibold text-[var(--subheading)]'
+                                                    : 'text-[var(--grey-text)]'
                                             }`}
                                         >
-                                            {branch}
+                                            {branch.name}
                                         </button>
                                     ))}
                                 </div>
@@ -160,14 +162,12 @@ export default function EmployeeList({ employees, branches, filters }: EmployeeL
                         <span className="rounded-lg bg-[var(--surface-badge)] px-4 py-2 text-sm font-medium text-[var(--subheading)]">
                             Karyawan : {employees.total}
                         </span>
-
                         <Link href={route('dashboard.employees.create')}>
                             <Button className="bg-[var(--surface-header)] hover:bg-[var(--surface-header-hover)]">
                                 <Plus className="mr-2 h-4 w-4" />
                                 Tambah Karyawan
                             </Button>
                         </Link>
-
                         <Button variant="outline" className="bg-[var(--neutral-white)]">
                             <Printer className="mr-2 h-4 w-4" />
                             Cetak
@@ -180,6 +180,7 @@ export default function EmployeeList({ employees, branches, filters }: EmployeeL
                         <TableHeader className="bg-[var(--surface-header)]">
                             <TableRow className="border-none hover:bg-[var(--surface-header)]">
                                 <TableHead className="text-[var(--text-light)]">Nama Karyawan</TableHead>
+                                <TableHead className="text-[var(--text-light)]">Email</TableHead>
                                 <TableHead className="text-[var(--text-light)]">Role</TableHead>
                                 <TableHead className="text-[var(--text-light)]">Cabang</TableHead>
                                 <TableHead className="text-[var(--text-light)]">Tanggal Aktif</TableHead>
@@ -191,7 +192,7 @@ export default function EmployeeList({ employees, branches, filters }: EmployeeL
                         <TableBody>
                             {employees.data.length === 0 ? (
                                 <TableRow>
-                                    <TableCell colSpan={6} className="py-10 text-center text-[var(--grey-text)]">
+                                    <TableCell colSpan={7} className="py-10 text-center text-[var(--grey-text)]">
                                         Belum ada karyawan, tambah karyawan terlebih dahulu
                                     </TableCell>
                                 </TableRow>
@@ -199,12 +200,13 @@ export default function EmployeeList({ employees, branches, filters }: EmployeeL
                                 employees.data.map((employee) => (
                                     <TableRow key={employee.id}>
                                         <TableCell className="font-medium text-[var(--subheading)]">{employee.name}</TableCell>
+                                        <TableCell className="text-[var(--grey-text)]">{employee.user?.email ?? '-'}</TableCell>
                                         <TableCell>
                                             <span className="rounded-full bg-orange-100 px-3 py-1 text-xs font-medium text-orange-600">
                                                 {employee.role}
                                             </span>
                                         </TableCell>
-                                        <TableCell className="text-[var(--grey-text)]">{employee.branch}</TableCell>
+                                        <TableCell className="text-[var(--grey-text)]">{employee.branch?.name ?? '-'}</TableCell>
                                         <TableCell className="text-[var(--grey-text)]">{employee.active_date}</TableCell>
                                         <TableCell>
                                             <span
@@ -241,6 +243,25 @@ export default function EmployeeList({ employees, branches, filters }: EmployeeL
                         </TableBody>
                     </Table>
                 </div>
+
+                {employees.links.length > 3 && (
+                    <div className="mt-4 flex items-center justify-center gap-1">
+                        {employees.links.map((link, i) => (
+                            <button
+                                aria-label="button"
+                                key={i}
+                                disabled={!link.url}
+                                onClick={() => link.url && router.get(link.url, {}, { preserveState: true })}
+                                className={`rounded-lg px-3 py-1.5 text-sm ${
+                                    link.active
+                                        ? 'bg-[var(--surface-header)] font-medium text-white'
+                                        : 'bg-[var(--neutral-white)] text-[var(--grey-text)] hover:bg-[var(--surface-badge)] disabled:cursor-not-allowed disabled:opacity-40'
+                                }`}
+                                dangerouslySetInnerHTML={{ __html: link.label }}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
 
             {activeMenuEmployee && (
@@ -255,8 +276,7 @@ export default function EmployeeList({ employees, branches, filters }: EmployeeL
             )}
 
             {detailEmployee && <EmployeeDetailModal employee={detailEmployee} onClose={() => setDetailEmployee(null)} />}
-
-            {editEmployee && <EmployeeEditModal form={editForm} onSubmit={handleSubmitEdit} onClose={handleCloseEdit} />}
+            {editEmployee && <EmployeeEditModal form={editForm} branches={branches} onSubmit={handleSubmitEdit} onClose={handleCloseEdit} />}
         </DashboardSidebarLayout>
     );
 }

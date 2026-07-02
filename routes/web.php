@@ -31,3 +31,4 @@ Route::middleware(['auth', 'onboarded', 'lite'])->group(function () {
 
 require __DIR__ . '/company-profile.php';
 require __DIR__ . '/auth.php';
+require __DIR__ . '/messaging.php';

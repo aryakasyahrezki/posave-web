@@ -14,8 +14,14 @@ return new class extends Migration
             $table->string('name');
             $table->string('logo')->nullable();
             $table->string('address')->nullable();
+            $table->string('province')->nullable();
+            $table->string('city')->nullable();
+            $table->string('zip')->nullable();
             $table->string('phone')->nullable();
             $table->string('instagram')->nullable();
+            $table->string('facebook')->nullable();
+            $table->string('x')->nullable();        
+            $table->string('youtube')->nullable(); 
             $table->string('whatsapp')->nullable();
             $table->string('website')->nullable();
             $table->timestamps();

@@ -8,8 +8,6 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // Detail item per transaksi. Menyimpan snapshot nama/harga/HPP
-        // saat penjualan agar laporan tetap akurat walau master produk berubah.
         Schema::create('transaction_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('transaction_id')->constrained()->cascadeOnDelete();
@@ -18,13 +16,13 @@ return new class extends Migration
                 ->constrained()
                 ->nullOnDelete();
 
-            $table->string('product_name');              // snapshot nama produk
-            $table->string('category_name')->nullable(); // snapshot kategori (untuk grouping laporan)
+            $table->string('product_name');          
+            $table->string('category_name')->nullable();
             $table->unsignedInteger('qty');
-            $table->decimal('unit_price', 15, 2);        // snapshot harga jual
-            $table->decimal('unit_cost', 15, 2)->default(0); // snapshot HPP
+            $table->decimal('unit_price', 15, 2);       
+            $table->decimal('unit_cost', 15, 2)->default(0); 
             $table->decimal('discount_amount', 15, 2)->default(0);
-            $table->decimal('subtotal', 15, 2);          // qty × unit_price − discount
+            $table->decimal('subtotal', 15, 2);         
             $table->timestamps();
         });
     }

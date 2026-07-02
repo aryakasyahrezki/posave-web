@@ -61,7 +61,7 @@ export const mainNavItems: NavItem[] = [
     },
     {
         title: 'Pesan',
-        routeName: '',
+        routeName: 'messaging.index',
         icon: MessageCircle,
     },
     {
@@ -71,15 +71,15 @@ export const mainNavItems: NavItem[] = [
         children: [
             {
                 title: 'Perusahaan',
-                routeName: '',
+                routeName: 'settings.company-profile',
             },
             {
                 title: 'Bukti Bayar',
-                routeName: '',
+                routeName: 'settings.receipt',
             },
             {
                 title: 'Toko',
-                routeName: '',
+                routeName: 'settings.branches',
             },
         ],
     },

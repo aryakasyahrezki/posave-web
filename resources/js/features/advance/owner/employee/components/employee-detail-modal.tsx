@@ -13,7 +13,7 @@ export function EmployeeDetailModal({ employee, onClose }: EmployeeDetailModalPr
             <div className="w-full max-w-md rounded-2xl bg-[var(--neutral-white)] p-6 shadow-xl">
                 <div className="mb-5 flex items-center justify-between">
                     <h3 className="text-lg font-bold text-[var(--subheading)]">Detail Karyawan</h3>
-                    <button onClick={onClose} aria-label="button-x">
+                    <button onClick={onClose} aria-label="Tutup modal">
                         <X className="h-5 w-5 text-[var(--grey-text)] hover:text-[var(--subheading)]" />
                     </button>
                 </div>
@@ -25,6 +25,11 @@ export function EmployeeDetailModal({ employee, onClose }: EmployeeDetailModalPr
                     </div>
 
                     <div>
+                        <span className="block text-sm font-medium text-[var(--grey-text)]">Email</span>
+                        <span className="text-base text-[var(--subheading)]">{employee.user?.email ?? '-'}</span>
+                    </div>
+
+                    <div>
                         <span className="block text-sm font-medium text-[var(--grey-text)]">Role</span>
                         <span className="mt-1 inline-block w-fit rounded-full bg-orange-100 px-3 py-1 text-xs font-medium text-orange-600">
                             {employee.role}
@@ -33,7 +38,7 @@ export function EmployeeDetailModal({ employee, onClose }: EmployeeDetailModalPr
 
                     <div>
                         <span className="block text-sm font-medium text-[var(--grey-text)]">Cabang</span>
-                        <span className="text-base text-[var(--subheading)]">{employee.branch}</span>
+                        <span className="text-base text-[var(--subheading)]">{employee.branch?.name ?? '-'}</span>
                     </div>
 
                     <div>

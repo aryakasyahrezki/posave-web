@@ -2,6 +2,8 @@
 
 namespace App\Models\Auth;
 
+use App\Models\Advance\Messaging\Broadcast;
+use App\Models\Advance\Owner\Settings\ReceiptSetting;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -43,5 +45,13 @@ class Company extends Model
     public function isAdvance(): bool
     {
         return $this->type === 'advance';
+    }
+    public function receiptSetting(): HasOne
+    {
+        return $this->hasOne(ReceiptSetting::class);
+    }
+    public function broadcasts(): HasMany
+    {
+        return $this->hasMany(Broadcast::class);
     }
 }

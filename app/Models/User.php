@@ -4,11 +4,17 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Models\Advance\Messaging\Broadcast;
+use App\Models\Advance\Messaging\Conversation;
+use App\Models\Advance\Messaging\Message;
+use App\Models\Advance\Messaging\Note;
 use App\Models\Auth\Branch;
 use App\Models\Auth\Company;
 use App\Models\Auth\UserProfile;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -92,5 +98,26 @@ class User extends Authenticatable
     public function isLite(): bool
     {
         return $this->company?->type === 'lite';
+    }
+    public function conversations(): BelongsToMany
+    {
+        return $this->belongsToMany(Conversation::class, 'conversation_user')
+            ->withPivot('last_read_at')
+            ->withTimestamps();
+    }
+
+    public function messages(): HasMany
+    {
+        return $this->hasMany(Message::class);
+    }
+
+    public function notes(): HasMany
+    {
+        return $this->hasMany(Note::class);
+    }
+
+    public function broadcasts(): HasMany
+    {
+        return $this->hasMany(Broadcast::class);
     }
 }

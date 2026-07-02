@@ -1,0 +1,174 @@
+import type { Contact, Conversation } from '../types';
+
+interface ConversationListProps {
+    conversations: Conversation[];
+    contacts: Contact[];
+    activeTab: 'pesan' | 'kontak';
+    activeConversationId: number | null;
+    authUserId: number;
+    onTabChange: (tab: 'pesan' | 'kontak') => void;
+    onSelectConversation: (id: number) => void;
+    onStartPrivateChat: (userId: number) => void;
+    search: string;
+    onSearchChange: (value: string) => void;
+}
+
+function formatTime(isoString: string): string {
+    const date = new Date(isoString);
+    const now = new Date();
+    const diff = now.getTime() - date.getTime();
+
+    if (diff < 86400000) {
+        return date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+    }
+    return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+}
+
+function getConversationName(conv: Conversation, authUserId: number): string {
+    if (conv.type === 'group') return conv.name ?? 'Group';
+    const other = conv.members.find((m) => m.id !== authUserId);
+    return other?.name ?? 'Unknown';
+}
+
+export function ConversationList({
+    conversations,
+    contacts,
+    activeTab,
+    activeConversationId,
+    authUserId,
+    onTabChange,
+    onSelectConversation,
+    onStartPrivateChat,
+    search,
+    onSearchChange,
+}: ConversationListProps) {
+    const filteredConversations = conversations.filter((c) => getConversationName(c, authUserId).toLowerCase().includes(search.toLowerCase()));
+
+    const filteredContacts = contacts.filter(
+        (c) => c.name.toLowerCase().includes(search.toLowerCase()) || c.email.toLowerCase().includes(search.toLowerCase()),
+    );
+
+    return (
+        <div className="flex h-full flex-col border-r border-[var(--border-strong)] bg-[var(--neutral-white)]">
+            {/* Tab */}
+            <div className="flex gap-2 border-b border-[var(--border-strong)] p-3">
+                <button
+                    aria-label="Tab Pesan"
+                    onClick={() => onTabChange('pesan')}
+                    className={`flex-1 rounded-lg py-2 text-sm font-medium transition-all ${
+                        activeTab === 'pesan'
+                            ? 'bg-[var(--surface-header)] text-[var(--text-light)]'
+                            : 'text-[var(--grey-text)] hover:bg-[var(--second-accent)]'
+                    }`}
+                >
+                    Pesan
+                </button>
+                <button
+                    aria-label="Tab Kontak"
+                    onClick={() => onTabChange('kontak')}
+                    className={`flex-1 rounded-lg py-2 text-sm font-medium transition-all ${
+                        activeTab === 'kontak'
+                            ? 'bg-[var(--surface-header)] text-[var(--text-light)]'
+                            : 'text-[var(--grey-text)] hover:bg-[var(--second-accent)]'
+                    }`}
+                >
+                    Kontak
+                </button>
+            </div>
+
+            {/* Search */}
+            <div className="p-3">
+                <input
+                    type="text"
+                    aria-label="Cari percakapan atau kontak"
+                    value={search}
+                    onChange={(e) => onSearchChange(e.target.value)}
+                    placeholder="Cari..."
+                    className="h-9 w-full rounded-lg border border-[var(--border-strong)] bg-[var(--page-bg)] px-3 text-sm outline-none focus:ring-1 focus:ring-[var(--border-strong)]"
+                />
+            </div>
+
+            {/* List */}
+            <div className="flex-1 overflow-y-auto">
+                {activeTab === 'pesan' ? (
+                    filteredConversations.length === 0 ? (
+                        <p className="py-10 text-center text-sm text-[var(--grey-text-muted)]">Belum ada percakapan</p>
+                    ) : (
+                        filteredConversations.map((conv) => {
+                            const name = getConversationName(conv, authUserId);
+                            const isActive = conv.id === activeConversationId;
+                            const initials = name
+                                .split(' ')
+                                .map((n) => n[0])
+                                .join('')
+                                .slice(0, 2)
+                                .toUpperCase();
+
+                            return (
+                                <button
+                                    key={conv.id}
+                                    aria-label={`Buka percakapan dengan ${name}`}
+                                    onClick={() => onSelectConversation(conv.id)}
+                                    className={`flex w-full items-center gap-3 px-4 py-3 text-left transition-all hover:bg-[var(--second-accent)] ${
+                                        isActive ? 'bg-[var(--second-accent)]' : ''
+                                    }`}
+                                >
+                                    {/* Avatar */}
+                                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[var(--surface-header)] text-xs font-medium text-[var(--text-light)]">
+                                        {conv.type === 'group' ? '👥' : initials}
+                                    </div>
+
+                                    <div className="min-w-0 flex-1">
+                                        <div className="flex items-center justify-between">
+                                            <span className="truncate text-sm font-medium text-[var(--subheading)]">{name}</span>
+                                            {conv.latest_message && (
+                                                <span className="ml-2 flex-shrink-0 text-xs text-[var(--grey-text-muted)]">
+                                                    {formatTime(conv.latest_message.created_at)}
+                                                </span>
+                                            )}
+                                        </div>
+                                        {conv.latest_message && (
+                                            <p className="truncate text-xs text-[var(--grey-text-muted)]">
+                                                {conv.latest_message.sender.id === authUserId ? 'Kamu: ' : ''}
+                                                {conv.latest_message.body ?? '📎 File'}
+                                            </p>
+                                        )}
+                                    </div>
+                                </button>
+                            );
+                        })
+                    )
+                ) : // Tab Kontak
+                filteredContacts.length === 0 ? (
+                    <p className="py-10 text-center text-sm text-[var(--grey-text-muted)]">Tidak ada kontak</p>
+                ) : (
+                    filteredContacts.map((contact) => {
+                        const initials = contact.name
+                            .split(' ')
+                            .map((n) => n[0])
+                            .join('')
+                            .slice(0, 2)
+                            .toUpperCase();
+
+                        return (
+                            <button
+                                key={contact.id}
+                                aria-label={`Mulai chat dengan ${contact.name}`}
+                                onClick={() => onStartPrivateChat(contact.id)}
+                                className="flex w-full items-center gap-3 px-4 py-3 text-left transition-all hover:bg-[var(--second-accent)]"
+                            >
+                                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[var(--surface-header)] text-xs font-medium text-[var(--text-light)]">
+                                    {initials}
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <p className="truncate text-sm font-medium text-[var(--subheading)]">{contact.name}</p>
+                                    <p className="truncate text-xs text-[var(--grey-text-muted)]">{contact.role}</p>
+                                </div>
+                            </button>
+                        );
+                    })
+                )}
+            </div>
+        </div>
+    );
+}

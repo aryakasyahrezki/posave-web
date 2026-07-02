@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('phone')->nullable();
             $table->boolean('is_main')->default(false);
+            $table->enum('status', ['open', 'closed'])->default('open');
             $table->timestamps();
         });
     }

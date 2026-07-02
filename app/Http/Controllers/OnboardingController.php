@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Advance\Messaging\Conversation;
 use App\Models\Auth\Branch;
 use App\Models\Auth\Company;
 use App\Models\Auth\CompanyProfile;
@@ -62,6 +63,15 @@ class OnboardingController extends Controller
             'branch_id'  => $branch->id,
             'role'       => 'owner',
         ]);
+
+        $conversation = Conversation::create([
+            'company_id' => $company->id,
+            'branch_id'  => $branch->id,
+            'type'       => 'group',
+            'name'       => $branch->name,
+        ]);
+
+        $conversation->members()->attach($user->id, ['last_read_at' => now()]);
 
         return redirect()->route('dashboard.index');
     }
