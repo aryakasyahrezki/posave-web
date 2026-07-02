@@ -1,8 +1,8 @@
-import React from 'react';
-import { X } from 'lucide-react';
 import { Button } from '@/components';
 import { useForm } from '@inertiajs/react';
-import type { InventoryCategory } from './inventory-category-actions-menu';
+import { X } from 'lucide-react';
+import React from 'react';
+import type { InventoryCategory } from '.';
 
 interface InventoryCategoryEditModalProps {
     category: InventoryCategory;
@@ -17,11 +17,17 @@ export function InventoryCategoryEditModal({ category, onClose }: InventoryCateg
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         put(route('dashboard.inventory.categories.update', category.id), {
-            onSuccess: () => { reset(); onClose(); },
+            onSuccess: () => {
+                reset();
+                onClose();
+            },
         });
     };
 
-    const handleClose = () => { reset(); onClose(); };
+    const handleClose = () => {
+        reset();
+        onClose();
+    };
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
@@ -37,16 +43,19 @@ export function InventoryCategoryEditModal({ category, onClose }: InventoryCateg
                     <div>
                         <label className="mb-1.5 block text-sm font-medium text-[var(--subheading)]">Nama Kategori</label>
                         <input
+                            aria-label="input-kategori"
                             type="text"
                             value={data.name}
                             onChange={(e) => setData('name', e.target.value)}
-                            className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                            className="border-input focus-visible:ring-ring w-full rounded-md border bg-transparent px-3 py-2 text-sm shadow-sm focus-visible:ring-1 focus-visible:outline-none"
                         />
                         {errors.name && <span className="text-sm text-red-500">{errors.name}</span>}
                     </div>
 
                     <div className="mt-2 flex justify-end gap-2">
-                        <Button type="button" variant="outline" onClick={handleClose}>Batal</Button>
+                        <Button type="button" variant="outline" onClick={handleClose}>
+                            Batal
+                        </Button>
                         <Button type="submit" disabled={processing}>
                             {processing ? 'Menyimpan...' : 'Simpan Perubahan'}
                         </Button>
