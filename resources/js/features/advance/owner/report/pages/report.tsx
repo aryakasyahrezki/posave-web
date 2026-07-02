@@ -1,14 +1,24 @@
+import { SalesFilterBar, type OutletOption, type SalesFilters } from '@/components';
 import { Input } from '@/components/ui';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DeltaBadge } from '@/features/advance/owner/dashboard/components';
+import { ExportMenu } from '@/features/advance/owner/report/components';
+import {
+    cur,
+    num,
+    pct,
+    runExport,
+    type Cell,
+    type CompanyInfo,
+    type ExportColumn,
+    type ExportFormat,
+    type ReportExport,
+} from '@/features/advance/owner/report/lib/export';
 import { DashboardSidebarLayout } from '@/layouts';
 import { formatNumber, formatPct, formatRupiah } from '@/lib/format';
 import { Head } from '@inertiajs/react';
 import { Search } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { SalesFilterBar, type OutletOption, type SalesFilters } from '../../components/sales-filter-bar';
-import { DeltaBadge } from '../../dashboard/components/delta-badge';
-import { ExportMenu } from '../components/export-menu';
-import { cur, num, pct, runExport, type Cell, type CompanyInfo, type ExportColumn, type ExportFormat, type ReportExport } from '../lib/export';
 
 // Kop usaha untuk header PDF. Sementara statis; nanti bisa dari Company Profile.
 const COMPANY: CompanyInfo = { name: 'Posave' };
@@ -250,7 +260,9 @@ function StatementCard({ lines, note, report, compare }: { lines: Line[]; note?:
             <dl className="divide-y divide-[var(--border)]">
                 {lines.map((line) => (
                     <div key={line.label} className={`grid ${grid} items-center gap-4 px-4 py-3.5`}>
-                        <dt className={`text-sm ${line.bold ? 'font-semibold text-[var(--subheading)]' : 'text-[var(--grey-text)]'}`}>{line.label}</dt>
+                        <dt className={`text-sm ${line.bold ? 'font-semibold text-[var(--subheading)]' : 'text-[var(--grey-text)]'}`}>
+                            {line.label}
+                        </dt>
                         <dd className={`text-right text-sm ${line.bold ? 'font-bold' : 'font-medium'} ${valueColor(line.current, line)}`}>
                             {fmtValue(line.current, line)}
                         </dd>

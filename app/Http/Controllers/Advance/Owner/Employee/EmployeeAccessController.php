@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Advance\Owner\Employee;
 
 use App\Http\Controllers\Controller;
+use App\Models\Advance\Owner\Employee\Employee;
 use App\Models\Advance\Owner\Employee\EmployeeAccess;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -48,8 +49,7 @@ class EmployeeAccessController extends Controller
 
         EmployeeAccess::create($validated);
 
-        return redirect()->route('dashboard.employees.access.index')->with('success', 'Kategori berhasil ditambahkan!');
-    
+        return redirect()->route('dashboard.employees-access.index')->with('success', 'Kategori berhasil ditambahkan!');
     }
 
     /**
@@ -83,9 +83,9 @@ class EmployeeAccessController extends Controller
         $access->update($validated);
 
         // sync nama role di tabel employees biar konsisten
-        \App\Models\Advance\Owner\Employee::where('role', $oldName)->update(['role' => $validated['name']]);
+        Employee::where('role', $oldName)->update(['role' => $validated['name']]);
 
-        return redirect()->route('dashboard.employees.access.index')->with('success', 'Kategori berhasil diperbarui!');
+        return redirect()->route('dashboard.employees-access.index')->with('success', 'Kategori berhasil diperbarui!');
     }
 
     /**
@@ -97,6 +97,6 @@ class EmployeeAccessController extends Controller
         $access = EmployeeAccess::findOrFail($id);
         $access->delete();
 
-        return redirect()->route('dashboard.employees.access.index')->with('success', 'Kategori berhasil dihapus!');
+        return redirect()->route('dashboard.employees-access.index')->with('success', 'Kategori berhasil dihapus!');
     }
 }

@@ -27,7 +27,7 @@ import {
     Wallet,
 } from 'lucide-react';
 import { lazy, Suspense, useState } from 'react';
-import { SalesFilterBar, type OutletOption, type SalesFilters } from '../../components/sales-filter-bar';
+import { SalesFilterBar, type OutletOption, type SalesFilters } from '../../../../../components/sales-filter-bar';
 
 // Chart berbasis recharts di-lazy-load: shell dashboard (KPI, tabel, dsb) tampil
 // instan, recharts di-split ke chunk terpisah dan dimuat setelah paint pertama.

@@ -16,7 +16,7 @@ export function EmployeeAccessEditModal({ access, onClose }: EmployeeAccessEditM
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        put(route('dashboard.employees.access.update', access.id), {
+        put(route('dashboard.employees-access.update', access.id), {
             onSuccess: () => {
                 reset();
                 onClose();

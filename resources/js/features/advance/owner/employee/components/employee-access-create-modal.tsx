@@ -14,7 +14,7 @@ export function EmployeeAccessCreateModal({ onClose }: EmployeeAccessCreateModal
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(route('dashboard.employees.access.store'), {
+        post(route('dashboard.employees-access.store'), {
             onSuccess: () => {
                 reset();
                 onClose();
