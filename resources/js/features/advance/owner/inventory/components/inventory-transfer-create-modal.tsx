@@ -1,9 +1,13 @@
-import React from 'react';
-import { Plus, Trash2, X } from 'lucide-react';
 import { Button } from '@/components';
 import { useForm } from '@inertiajs/react';
+import { Plus, Trash2, X } from 'lucide-react';
+import React from 'react';
 
-interface InventoryItemOption { id: number; name: string; sku: string; }
+interface InventoryItemOption {
+    id: number;
+    name: string;
+    sku: string;
+}
 
 interface InventoryTransferCreateModalProps {
     inventoryItems: InventoryItemOption[];
@@ -23,7 +27,10 @@ export function InventoryTransferCreateModal({ inventoryItems, onClose }: Invent
     };
 
     const removeItem = (index: number) => {
-        setData('items', data.items.filter((_, i) => i !== index));
+        setData(
+            'items',
+            data.items.filter((_, i) => i !== index),
+        );
     };
 
     const updateItem = (index: number, field: 'inventory_item_id' | 'quantity', value: string | number) => {
@@ -35,7 +42,10 @@ export function InventoryTransferCreateModal({ inventoryItems, onClose }: Invent
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         post(route('dashboard.inventory.transfers.store'), {
-            onSuccess: () => { reset(); onClose(); },
+            onSuccess: () => {
+                reset();
+                onClose();
+            },
         });
     };
 
@@ -44,7 +54,13 @@ export function InventoryTransferCreateModal({ inventoryItems, onClose }: Invent
             <div className="w-full max-w-lg rounded-2xl bg-[var(--neutral-white)] p-6 shadow-xl">
                 <div className="mb-5 flex items-center justify-between">
                     <h3 className="text-lg font-bold text-[var(--subheading)]">Buat Kiriman Baru</h3>
-                    <button onClick={() => { reset(); onClose(); }}>
+                    <button
+                        onClick={() => {
+                            reset();
+                            onClose();
+                        }}
+                        aria-label="button-x"
+                    >
                         <X className="h-5 w-5 text-[var(--grey-text)] hover:text-[var(--subheading)]" />
                     </button>
                 </div>
@@ -58,7 +74,7 @@ export function InventoryTransferCreateModal({ inventoryItems, onClose }: Invent
                                 value={data.sender_branch}
                                 onChange={(e) => setData('sender_branch', e.target.value)}
                                 placeholder="Nama toko pengirim"
-                                className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm"
+                                className="border-input w-full rounded-md border bg-transparent px-3 py-2 text-sm"
                             />
                             {errors.sender_branch && <span className="text-sm text-red-500">{errors.sender_branch}</span>}
                         </div>
@@ -69,7 +85,7 @@ export function InventoryTransferCreateModal({ inventoryItems, onClose }: Invent
                                 value={data.receiver_branch}
                                 onChange={(e) => setData('receiver_branch', e.target.value)}
                                 placeholder="Nama toko penerima"
-                                className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm"
+                                className="border-input w-full rounded-md border bg-transparent px-3 py-2 text-sm"
                             />
                             {errors.receiver_branch && <span className="text-sm text-red-500">{errors.receiver_branch}</span>}
                         </div>
@@ -78,10 +94,11 @@ export function InventoryTransferCreateModal({ inventoryItems, onClose }: Invent
                     <div>
                         <label className="mb-1.5 block text-sm font-medium text-[var(--subheading)]">Tanggal Kirim</label>
                         <input
+                            aria-label="input-date"
                             type="date"
                             value={data.date}
                             onChange={(e) => setData('date', e.target.value)}
-                            className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm"
+                            className="border-input w-full rounded-md border bg-transparent px-3 py-2 text-sm"
                         />
                     </div>
 
@@ -97,24 +114,28 @@ export function InventoryTransferCreateModal({ inventoryItems, onClose }: Invent
                             {data.items.map((item, index) => (
                                 <div key={index} className="flex items-center gap-2">
                                     <select
+                                        aria-label="input-barang"
                                         value={item.inventory_item_id}
                                         onChange={(e) => updateItem(index, 'inventory_item_id', e.target.value)}
-                                        className="flex-1 rounded-md border border-input bg-transparent px-3 py-2 text-sm"
+                                        className="border-input flex-1 rounded-md border bg-transparent px-3 py-2 text-sm"
                                     >
                                         <option value="">Pilih barang</option>
                                         {inventoryItems.map((i) => (
-                                            <option key={i.id} value={i.id}>{i.name} ({i.sku})</option>
+                                            <option key={i.id} value={i.id}>
+                                                {i.name} ({i.sku})
+                                            </option>
                                         ))}
                                     </select>
                                     <input
+                                        aria-label="input-number"
                                         type="number"
                                         min={1}
                                         value={item.quantity}
                                         onChange={(e) => updateItem(index, 'quantity', Number(e.target.value))}
-                                        className="w-20 rounded-md border border-input bg-transparent px-3 py-2 text-sm"
+                                        className="border-input w-20 rounded-md border bg-transparent px-3 py-2 text-sm"
                                     />
                                     {data.items.length > 1 && (
-                                        <button type="button" onClick={() => removeItem(index)}>
+                                        <button type="button" onClick={() => removeItem(index)} aria-label="button-x">
                                             <Trash2 className="h-4 w-4 text-red-500" />
                                         </button>
                                     )}
@@ -125,7 +146,16 @@ export function InventoryTransferCreateModal({ inventoryItems, onClose }: Invent
                     </div>
 
                     <div className="mt-2 flex justify-end gap-2">
-                        <Button type="button" variant="outline" onClick={() => { reset(); onClose(); }}>Batal</Button>
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => {
+                                reset();
+                                onClose();
+                            }}
+                        >
+                            Batal
+                        </Button>
                         <Button type="submit" disabled={processing}>
                             {processing ? 'Menyimpan...' : 'Buat Kiriman'}
                         </Button>

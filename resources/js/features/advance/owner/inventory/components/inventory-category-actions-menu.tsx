@@ -1,11 +1,5 @@
-import React from 'react';
 import { Pencil, Trash2 } from 'lucide-react';
-
-export interface InventoryCategory {
-    id: number;
-    name: string;
-    items_count: number;
-}
+import { InventoryCategory } from '.';
 
 interface InventoryCategoryActionsMenuProps {
     category: InventoryCategory;
@@ -19,10 +13,7 @@ export function InventoryCategoryActionsMenu({ category, position, onClose, onEd
     return (
         <>
             <div className="fixed inset-0 z-40" onClick={onClose} />
-            <div
-                className="fixed z-50 w-36 overflow-hidden rounded-xl shadow-lg"
-                style={{ top: position.top, left: position.left }}
-            >
+            <div className="fixed z-50 w-36 overflow-hidden rounded-xl shadow-lg" style={{ top: position.top, left: position.left }}>
                 <button
                     onClick={() => onEdit(category)}
                     className="flex w-full items-center gap-2 bg-orange-50 px-4 py-3 text-sm font-medium text-orange-500 hover:bg-orange-100"

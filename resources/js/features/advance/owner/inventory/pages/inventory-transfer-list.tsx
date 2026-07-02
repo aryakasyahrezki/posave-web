@@ -1,12 +1,16 @@
-import React, { useState, useRef } from 'react';
-import { Head, router } from '@inertiajs/react';
-import { DashboardSidebarLayout } from '@/layouts';
 import { Button, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components';
+import { DashboardSidebarLayout } from '@/layouts';
+import { Head, router } from '@inertiajs/react';
 import { ChevronDown, ChevronLeft, ChevronRight, MoreVertical, Plus, Printer, Search } from 'lucide-react';
+import React, { useRef, useState } from 'react';
 import { InventoryTransferActionsMenu, type Transfer } from '../components/inventory-transfer-actions-menu';
 import { InventoryTransferCreateModal } from '../components/inventory-transfer-create-modal';
 
-interface InventoryItemOption { id: number; name: string; sku: string; }
+interface InventoryItemOption {
+    id: number;
+    name: string;
+    sku: string;
+}
 
 interface InventoryTransferListProps {
     transfers: {
@@ -40,7 +44,7 @@ export default function InventoryTransferList({ transfers, inventoryItems, filte
         router.get(
             route('dashboard.inventory.transfers.index'),
             { ...filters, ...overrides },
-            { preserveState: true, preserveScroll: true, replace: true }
+            { preserveState: true, preserveScroll: true, replace: true },
         );
     };
 
@@ -51,7 +55,10 @@ export default function InventoryTransferList({ transfers, inventoryItems, filte
     };
 
     const toggleMenu = (id: number) => {
-        if (openMenuId === id) { setOpenMenuId(null); return; }
+        if (openMenuId === id) {
+            setOpenMenuId(null);
+            return;
+        }
         const btn = buttonRefs.current[id];
         if (btn) {
             const rect = btn.getBoundingClientRect();
@@ -87,14 +94,15 @@ export default function InventoryTransferList({ transfers, inventoryItems, filte
     const activeMenuTransfer = transfers.data.find((t) => t.id === openMenuId);
 
     const formattedDate = new Date(currentDate).toLocaleDateString('id-ID', {
-        day: 'numeric', month: 'long', year: 'numeric',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
     });
 
     return (
         <DashboardSidebarLayout title="Kiriman" description="Kelola pengiriman barang antar toko anda">
             <Head title="Kiriman" />
             <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-[var(--page-bg)] p-6">
-
                 <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
                         <form onSubmit={handleBranchFilter}>
@@ -109,14 +117,21 @@ export default function InventoryTransferList({ transfers, inventoryItems, filte
                         </form>
 
                         <div className="flex items-center gap-2 rounded-lg border border-[var(--border-strong)] bg-[var(--neutral-white)] px-3 py-2">
-                            <button onClick={() => shiftDate(-1)}><ChevronLeft className="h-4 w-4" /></button>
+                            <button aria-label="left" onClick={() => shiftDate(-1)}>
+                                <ChevronLeft className="h-4 w-4" />
+                            </button>
                             <span className="text-sm">{formattedDate}</span>
-                            <button onClick={() => shiftDate(1)}><ChevronRight className="h-4 w-4" /></button>
+                            <button aria-label="input-right" onClick={() => shiftDate(1)}>
+                                <ChevronRight className="h-4 w-4" />
+                            </button>
                         </div>
                     </div>
 
                     <div className="flex items-center gap-3">
-                        <Button onClick={() => setShowCreateModal(true)} className="bg-[var(--surface-header)] hover:bg-[var(--surface-header-hover)]">
+                        <Button
+                            onClick={() => setShowCreateModal(true)}
+                            className="bg-[var(--surface-header)] hover:bg-[var(--surface-header-hover)]"
+                        >
                             <Plus className="mr-2 h-4 w-4" />
                             Buat Kiriman
                         </Button>
@@ -130,19 +145,20 @@ export default function InventoryTransferList({ transfers, inventoryItems, filte
                 <div className="mb-4 flex items-center justify-between gap-4">
                     <form onSubmit={handleSearch} className="flex items-center gap-2">
                         <div className="relative">
-                            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--grey-text)]" />
+                            <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-[var(--grey-text)]" />
                             <input
                                 type="text"
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
                                 placeholder="Search"
-                                className="h-10 rounded-lg border border-[var(--border-strong)] bg-[var(--neutral-white)] pl-9 pr-4 text-sm focus:outline-none focus:ring-1 focus:ring-ring"
+                                className="focus:ring-ring h-10 rounded-lg border border-[var(--border-strong)] bg-[var(--neutral-white)] pr-4 pl-9 text-sm focus:ring-1 focus:outline-none"
                             />
                         </div>
                     </form>
 
                     <div className="relative">
                         <select
+                            aria-label="input-status"
                             value={filters.status ?? ''}
                             onChange={(e) => applyFilters({ status: e.target.value || undefined })}
                             className="h-10 appearance-none rounded-lg border border-[var(--border-strong)] bg-[var(--neutral-white)] px-3 pr-9 text-sm"
@@ -152,7 +168,7 @@ export default function InventoryTransferList({ transfers, inventoryItems, filte
                             <option value="success">Success</option>
                             <option value="cancelled">Cancelled</option>
                         </select>
-                        <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--grey-text)]" />
+                        <ChevronDown className="pointer-events-none absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 text-[var(--grey-text)]" />
                     </div>
                 </div>
 
@@ -181,9 +197,15 @@ export default function InventoryTransferList({ transfers, inventoryItems, filte
                                 transfers.data.map((transfer) => (
                                     <TableRow key={transfer.id}>
                                         <TableCell>
-                                            <div className="font-medium">{new Date(transfer.date).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</div>
+                                            <div className="font-medium">
+                                                {new Date(transfer.date).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
+                                            </div>
                                             <div className="text-xs text-[var(--grey-text)]">
-                                                {new Date(transfer.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
+                                                {new Date(transfer.date).toLocaleDateString('id-ID', {
+                                                    day: 'numeric',
+                                                    month: 'long',
+                                                    year: 'numeric',
+                                                })}
                                             </div>
                                         </TableCell>
                                         <TableCell>{transfer.sender_branch}</TableCell>
@@ -197,7 +219,9 @@ export default function InventoryTransferList({ transfers, inventoryItems, filte
                                         </TableCell>
                                         <TableCell className="relative">
                                             <Button
-                                                ref={(el) => { buttonRefs.current[transfer.id] = el; }}
+                                                ref={(el) => {
+                                                    buttonRefs.current[transfer.id] = el;
+                                                }}
                                                 variant="ghost"
                                                 size="icon"
                                                 onClick={() => toggleMenu(transfer.id)}
@@ -220,6 +244,7 @@ export default function InventoryTransferList({ transfers, inventoryItems, filte
                     <div className="flex items-center gap-1">
                         {transfers.links.map((link, i) => (
                             <button
+                                aria-label="button"
                                 key={i}
                                 disabled={!link.url}
                                 onClick={() => link.url && router.get(link.url, {}, { preserveState: true })}
@@ -235,6 +260,7 @@ export default function InventoryTransferList({ transfers, inventoryItems, filte
 
                     <div className="relative">
                         <select
+                            aria-label="input-page"
                             value={filters.per_page ?? '6'}
                             onChange={(e) => applyFilters({ per_page: e.target.value })}
                             className="h-9 appearance-none rounded-lg border border-[var(--border-strong)] bg-[var(--neutral-white)] px-3 pr-9 text-sm"
@@ -243,7 +269,7 @@ export default function InventoryTransferList({ transfers, inventoryItems, filte
                             <option value="12">12 per halaman</option>
                             <option value="24">24 per halaman</option>
                         </select>
-                        <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--grey-text)]" />
+                        <ChevronDown className="pointer-events-none absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 text-[var(--grey-text)]" />
                     </div>
                 </div>
             </div>
@@ -258,12 +284,7 @@ export default function InventoryTransferList({ transfers, inventoryItems, filte
                 />
             )}
 
-            {showCreateModal && (
-                <InventoryTransferCreateModal
-                    inventoryItems={inventoryItems}
-                    onClose={() => setShowCreateModal(false)}
-                />
-            )}
+            {showCreateModal && <InventoryTransferCreateModal inventoryItems={inventoryItems} onClose={() => setShowCreateModal(false)} />}
         </DashboardSidebarLayout>
     );
 }

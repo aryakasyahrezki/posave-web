@@ -1,5 +1,5 @@
 import type { NavItem } from '@/types';
-import { BookOpen, Folder, Group, LayoutGrid, MessageCircle, Package, ReceiptPoundSterling } from 'lucide-react';
+import { BookOpen, Building, Folder, Group, LayoutGrid, MessageCircle, Package, ReceiptPoundSterling } from 'lucide-react';
 
 export const mainNavItems: NavItem[] = [
     {
@@ -63,6 +63,25 @@ export const mainNavItems: NavItem[] = [
         title: 'Pesan',
         routeName: '',
         icon: MessageCircle,
+    },
+    {
+        title: 'Pengaturan',
+        routeName: '',
+        icon: Building,
+        children: [
+            {
+                title: 'Perusahaan',
+                routeName: '',
+            },
+            {
+                title: 'Bukti Bayar',
+                routeName: '',
+            },
+            {
+                title: 'Toko',
+                routeName: '',
+            },
+        ],
     },
 ];
 

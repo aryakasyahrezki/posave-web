@@ -1,11 +1,14 @@
-import React, { useState, useRef } from 'react';
-import { Head, router } from '@inertiajs/react';
-import { DashboardSidebarLayout } from '@/layouts';
 import { Button, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components';
+import {
+    InventorySupplierActionsMenu,
+    InventorySupplierCreateModal,
+    InventorySupplierEditModal,
+    type Supplier,
+} from '@/features/advance/owner/inventory/components';
+import { DashboardSidebarLayout } from '@/layouts';
+import { Head, router } from '@inertiajs/react';
 import { ChevronDown, Mail, MapPin, MoreVertical, Phone, Plus, Printer, Search, Store } from 'lucide-react';
-import { InventorySupplierActionsMenu, type Supplier } from '../components/inventory-supplier-actions-menu';
-import { InventorySupplierCreateModal } from '../components/inventory-supplier-create-modal';
-import { InventorySupplierEditModal } from '../components/inventory-supplier-edit-modal';
+import React, { useRef, useState } from 'react';
 
 interface InventorySupplierListProps {
     suppliers?: {
@@ -19,10 +22,10 @@ interface InventorySupplierListProps {
     filters?: { search?: string; category?: string; per_page?: string };
 }
 
-export default function InventorySupplier({ 
-    suppliers = { data: [], total: 0, from: 0, to: 0, links: [] }, 
-    categories = [], 
-    filters = {} 
+export default function InventorySupplier({
+    suppliers = { data: [], total: 0, from: 0, to: 0, links: [] },
+    categories = [],
+    filters = {},
 }: InventorySupplierListProps) {
     const [openMenuId, setOpenMenuId] = useState<number | null>(null);
     const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
@@ -36,14 +39,14 @@ export default function InventorySupplier({
         router.get(
             route('dashboard.inventory.suppliers.index'),
             { ...filters, ...overrides },
-            { preserveState: true, preserveScroll: true, replace: true }
+            { preserveState: true, preserveScroll: true, replace: true },
         );
     };
 
     const toggleMenu = (id: number) => {
-        if (openMenuId === id) { 
-            setOpenMenuId(null); 
-            return; 
+        if (openMenuId === id) {
+            setOpenMenuId(null);
+            return;
         }
         const btn = buttonRefs.current[id];
         if (btn) {
@@ -55,9 +58,9 @@ export default function InventorySupplier({
 
     const closeMenu = () => setOpenMenuId(null);
 
-    const handleEdit = (supplier: Supplier) => { 
-        setEditSupplier(supplier); 
-        closeMenu(); 
+    const handleEdit = (supplier: Supplier) => {
+        setEditSupplier(supplier);
+        closeMenu();
     };
 
     const handleDelete = (id: number) => {
@@ -83,18 +86,17 @@ export default function InventorySupplier({
         <DashboardSidebarLayout title="Pemasok" description="Kelola daftar pemasok barang-barang anda">
             <Head title="Pemasok" />
             <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-[var(--page-bg)] p-6">
-
                 <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
                     <div className="flex flex-wrap items-center gap-3">
                         <form onSubmit={handleSearch}>
                             <div className="relative">
-                                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--grey-text)]" />
+                                <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-[var(--grey-text)]" />
                                 <input
                                     type="text"
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
                                     placeholder="Search"
-                                    className="h-10 rounded-lg border border-[var(--border-strong)] bg-[var(--neutral-white)] pl-9 pr-4 text-sm focus:outline-none focus:ring-1 focus:ring-ring"
+                                    className="focus:ring-ring h-10 rounded-lg border border-[var(--border-strong)] bg-[var(--neutral-white)] pr-4 pl-9 text-sm focus:ring-1 focus:outline-none"
                                 />
                             </div>
                         </form>
@@ -112,7 +114,7 @@ export default function InventorySupplier({
                             {openCategoryFilter && (
                                 <>
                                     <div className="fixed inset-0 z-40" onClick={() => setOpenCategoryFilter(false)} />
-                                    <div className="absolute left-0 top-full z-50 mt-1 w-48 overflow-hidden rounded-xl bg-[var(--neutral-white)] py-1 shadow-lg">
+                                    <div className="absolute top-full left-0 z-50 mt-1 w-48 overflow-hidden rounded-xl bg-[var(--neutral-white)] py-1 shadow-lg">
                                         <button
                                             onClick={() => handleFilterCategory(undefined)}
                                             className={`flex w-full items-center px-4 py-2.5 text-left text-sm hover:bg-[var(--surface-badge)] ${!filters?.category ? 'font-semibold text-[var(--subheading)]' : 'text-[var(--grey-text)]'}`}
@@ -135,7 +137,10 @@ export default function InventorySupplier({
                     </div>
 
                     <div className="flex items-center gap-3">
-                        <Button onClick={() => setShowCreateModal(true)} className="bg-[var(--surface-header)] hover:bg-[var(--surface-header-hover)]">
+                        <Button
+                            onClick={() => setShowCreateModal(true)}
+                            className="bg-[var(--surface-header)] hover:bg-[var(--surface-header-hover)]"
+                        >
                             <Plus className="mr-2 h-4 w-4" />
                             Buat Pemasok
                         </Button>
@@ -213,7 +218,9 @@ export default function InventorySupplier({
                                         </TableCell>
                                         <TableCell className="relative">
                                             <Button
-                                                ref={(el) => { buttonRefs.current[supplier.id] = el; }}
+                                                ref={(el) => {
+                                                    buttonRefs.current[supplier.id] = el;
+                                                }}
                                                 variant="ghost"
                                                 size="icon"
                                                 onClick={() => toggleMenu(supplier.id)}
@@ -251,6 +258,7 @@ export default function InventorySupplier({
 
                     <div className="relative">
                         <select
+                            aria-label="page"
                             value={filters?.per_page ?? '6'}
                             onChange={(e) => applyFilters({ per_page: e.target.value })}
                             className="h-9 appearance-none rounded-lg border border-[var(--border-strong)] bg-[var(--neutral-white)] px-3 pr-9 text-sm"
@@ -259,7 +267,7 @@ export default function InventorySupplier({
                             <option value="12">12 per halaman</option>
                             <option value="24">24 per halaman</option>
                         </select>
-                        <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--grey-text)]" />
+                        <ChevronDown className="pointer-events-none absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 text-[var(--grey-text)]" />
                     </div>
                 </div>
             </div>
@@ -274,13 +282,9 @@ export default function InventorySupplier({
                 />
             )}
 
-            {showCreateModal && (
-                <InventorySupplierCreateModal onClose={() => setShowCreateModal(false)} />
-            )}
+            {showCreateModal && <InventorySupplierCreateModal onClose={() => setShowCreateModal(false)} />}
 
-            {editSupplier && (
-                <InventorySupplierEditModal supplier={editSupplier} onClose={() => setEditSupplier(null)} />
-            )}
+            {editSupplier && <InventorySupplierEditModal supplier={editSupplier} onClose={() => setEditSupplier(null)} />}
         </DashboardSidebarLayout>
     );
 }
