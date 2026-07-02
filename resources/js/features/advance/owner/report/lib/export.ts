@@ -13,8 +13,11 @@ import { formatNumber, formatPct, formatRupiah } from '@/lib/format';
 const BRAND = {
     headerFill: '#22303F', // --surface-header
     headerText: '#FFFFFF', // --text-light
-    stripe: '#F1F5F9', // --second-accent
+    stripe: '#F1F5F9', // --second-accent (baris total)
+    stripeLight: '#F8FAFC', // slate-50 (zebra baris genap)
     subtle: '#394F67', // --grey-text
+    border: '#E2E8F0', // --border
+    boldTop: '#CBD5E1', // slate-300 (garis atas baris total)
 } as const;
 
 const BRAND_RGB = {
@@ -95,8 +98,17 @@ export function exportReportCsv(report: ReportExport) {
         const s = String(v);
         return /["\n\r;]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
     };
+    // Kop laporan sebagai baris preamble (kolom A), lalu tabel data.
+    const preamble: (string | number)[][] = [];
+    if (report.company?.name) preamble.push([report.company.name]);
+    const contact = [report.company?.address, report.company?.phone].filter(Boolean).join(' · ');
+    if (contact) preamble.push([contact]);
+    preamble.push([report.title]);
+    if (report.subtitle) preamble.push([report.subtitle]);
+    preamble.push([]); // baris kosong
+
     const headerLine = report.columns.map((c) => c.header);
-    const lines = [headerLine, ...report.rows.map((r) => r.map(cellCsv))];
+    const lines = [...preamble, headerLine, ...report.rows.map((r) => r.map(cellCsv))];
     const csv = lines.map((r) => r.map(escape).join(DELIMITER)).join('\r\n');
     // BOM (﻿) supaya karakter non-ASCII terbaca benar di Excel.
     triggerDownload(new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' }), `${report.filenameBase}.csv`);
@@ -109,59 +121,93 @@ type XlsxCell = {
     type?: typeof String | typeof Number;
     format?: string;
     fontWeight?: 'bold';
-    align?: 'left' | 'right';
-    backgroundColor?: string;
-    color?: string;
     fontSize?: number;
+    align?: 'left' | 'right' | 'center';
+    alignVertical?: 'top' | 'center' | 'bottom';
+    backgroundColor?: string;
+    textColor?: string;
+    height?: number;
+    borderColor?: string;
+    borderStyle?: string;
+    topBorderColor?: string;
+    topBorderStyle?: string;
+    bottomBorderColor?: string;
+    bottomBorderStyle?: string;
 };
 
 /**
  * Signature minimal write-excel-file v4 (mode baris) — hindari friksi overload tipe library.
  * v4 TIDAK mengunduh langsung; ia mengembalikan objek { toBlob() } (di build /browser).
  */
-type WriteXlsxFile = (rows: XlsxCell[][], options?: { columns?: { width?: number }[] }) => Promise<{ toBlob: () => Promise<Blob> }> | { toBlob: () => Promise<Blob> };
+type WriteXlsxFile = (
+    rows: XlsxCell[][],
+    options?: { columns?: { width?: number }[]; showGridLines?: boolean },
+) => Promise<{ toBlob: () => Promise<Blob> }> | { toBlob: () => Promise<Blob> };
 
 export async function exportReportExcel(report: ReportExport) {
     // Subpath /browser: build tanpa dependensi Node (fs/stream), aman untuk Vite.
     const writeXlsxFile = (await import('write-excel-file/browser')).default as unknown as WriteXlsxFile;
     const bold = new Set(report.boldRows ?? []);
+    const company = report.company;
 
-    const numberFormat = (kind: CellKind) => (kind === 'percent' ? '0.0"%"' : '#,##0');
+    // Currency diberi awalan "Rp" agar jelas mata uang tapi tetap numerik (bisa dijumlah).
+    const numberFormat = (kind: CellKind) => (kind === 'percent' ? '0.0"%"' : kind === 'currency' ? '"Rp"\\ #,##0' : '#,##0');
 
-    const titleRow: XlsxCell[] = [{ value: report.title, fontWeight: 'bold', fontSize: 15 }];
-    const subtitleRow: XlsxCell[] = report.subtitle ? [{ value: report.subtitle, color: BRAND.subtle, fontSize: 11 }] : [];
+    // === Kop laporan ===
+    const preamble: XlsxCell[][] = [];
+    if (company?.name) preamble.push([{ value: company.name, type: String, fontWeight: 'bold', fontSize: 16, textColor: BRAND.headerFill }]);
+    const contact = [company?.address, company?.phone].filter(Boolean).join('  ·  ');
+    if (contact) preamble.push([{ value: contact, type: String, fontSize: 9, textColor: BRAND.subtle }]);
+    preamble.push([{ value: report.title, type: String, fontWeight: 'bold', fontSize: 13, textColor: BRAND.headerFill }]);
+    if (report.subtitle) preamble.push([{ value: report.subtitle, type: String, fontSize: 10, textColor: BRAND.subtle }]);
+    preamble.push([{ value: '', type: String }]); // baris kosong pemisah
 
+    // === Header tabel ===
     const headerRow: XlsxCell[] = report.columns.map((c) => ({
         value: c.header,
         type: String,
         fontWeight: 'bold',
         backgroundColor: BRAND.headerFill,
-        color: BRAND.headerText,
+        textColor: BRAND.headerText,
         align: c.align ?? 'left',
+        alignVertical: 'center',
+        height: 22,
+        borderColor: BRAND.headerFill,
+        borderStyle: 'thin',
     }));
 
-    const dataRows: XlsxCell[][] = report.rows.map((row, i) =>
-        row.map((cell, col): XlsxCell => {
-            const align = report.columns[col]?.align ?? 'left';
-            const isBold = bold.has(i);
-            if (typeof cell === 'string') {
-                return { value: cell, type: String, align, fontWeight: isBold ? 'bold' : undefined };
-            }
+    // === Baris data (zebra + baris total ditonjolkan + garis pembatas) ===
+    const dataRows: XlsxCell[][] = report.rows.map((row, i) => {
+        const isBold = bold.has(i);
+        const rowBg = isBold ? BRAND.stripe : i % 2 === 1 ? BRAND.stripeLight : undefined;
+        return row.map((cell, col): XlsxCell => {
+            const base: XlsxCell = {
+                value: null,
+                align: report.columns[col]?.align ?? 'left',
+                alignVertical: 'center',
+                fontWeight: isBold ? 'bold' : undefined,
+                backgroundColor: rowBg,
+                bottomBorderColor: BRAND.border,
+                bottomBorderStyle: 'thin',
+                topBorderColor: isBold ? BRAND.boldTop : undefined,
+                topBorderStyle: isBold ? 'thin' : undefined,
+            };
+            if (typeof cell === 'string') return { ...base, value: cell, type: String };
             return {
+                ...base,
                 value: cell.kind === 'percent' ? Math.round(cell.n * 10) / 10 : Math.round(cell.n),
                 type: Number,
                 format: numberFormat(cell.kind),
-                align,
-                fontWeight: isBold ? 'bold' : undefined,
             };
-        }),
-    );
+        });
+    });
 
-    const data = [titleRow, ...(subtitleRow.length ? [subtitleRow] : []), headerRow, ...dataRows];
-    const columns = report.columns.map((c) => ({ width: c.width ?? (c.align === 'right' ? 16 : 28) }));
+    const data = [...preamble, headerRow, ...dataRows];
+    const columns = report.columns.map((c) => ({ width: c.width ?? (c.align === 'right' ? 18 : 30) }));
 
     // v4: ambil Blob dari objek hasil, lalu unduh via jalur yang sama & terbukti (CSV/PDF).
-    const workbook = await writeXlsxFile(data, { columns });
+    // showGridLines:false — pakai border sel sendiri agar tampilan bersih & fokus.
+    const workbook = await writeXlsxFile(data, { columns, showGridLines: false });
     triggerDownload(await workbook.toBlob(), `${report.filenameBase}.xlsx`);
 }
 
