@@ -12,7 +12,7 @@ use App\Http\Controllers\Advance\Owner\MessageController;
 use App\Http\Controllers\Advance\Owner\ReportController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(function () {
+Route::prefix('dashboard')->name('dashboard.')->group(function () {
 
   Route::get('/', [DashboardController::class, 'index'])->name('index');
 
