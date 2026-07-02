@@ -125,9 +125,8 @@ export function SalesFilterBar({ routeName, outlets, filters, extraParams = {}, 
 
             {showPrint && (
                 <Button
-                    variant="outline"
                     onClick={onPrint ?? (() => window.print())}
-                    className="h-10 w-full justify-center border-[var(--border)] bg-[var(--neutral-white)] text-[var(--subheading)] sm:w-auto"
+                    className="h-10 w-full justify-center rounded-lg bg-[var(--surface-header)] font-semibold text-[var(--text-light)] shadow-sm hover:opacity-90 sm:w-auto"
                 >
                     <Printer className="mr-2 h-4 w-4" />
                     Cetak
