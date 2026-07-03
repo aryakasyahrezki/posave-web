@@ -85,6 +85,24 @@ export const mainNavItems: NavItem[] = [
     },
 ];
 
+export const cashierNavItems: NavItem[] = [
+    {
+        title: 'Pesanan',
+        routeName: 'cashier.order.index',
+        icon: ShoppingCart,
+    },
+    {
+        title: 'Riwayat Pesanan',
+        routeName: 'cashier.history.index',
+        icon: ClipboardList,
+    },
+    {
+        title: 'Pesan',
+        routeName: '',
+        icon: MessageCircle,
+    },
+];
+
 export const footerNavItems: NavItem[] = [
     {
         title: 'Repository',

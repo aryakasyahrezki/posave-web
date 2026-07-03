@@ -11,6 +11,10 @@ use App\Http\Controllers\Advance\Owner\Inventory\SupplierController;
 use App\Http\Controllers\Advance\Owner\Inventory\TransferController;
 use App\Http\Controllers\Advance\Owner\MessageController;
 use App\Http\Controllers\Advance\Owner\ReportController;
+
+use App\Http\Controllers\Advance\Cashier\HistoryController;
+use App\Http\Controllers\Advance\Cashier\OrderController;
+
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('dashboard')->name('dashboard.')->group(function () {
@@ -32,4 +36,12 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
   Route::resource('reports', ReportController::class);
 
   Route::resource('messages', MessageController::class);
+});
+
+// --- ROUTE UNTUK CASHIER ---
+Route::middleware('auth')->prefix('cashier')->name('cashier.')->group(function () {
+    
+    Route::get('/order', [OrderController::class, 'index'])->name('order.index');
+    Route::get('/history', [HistoryController::class, 'index'])->name('history.index');
+    
 });
