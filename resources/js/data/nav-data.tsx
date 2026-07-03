@@ -1,5 +1,5 @@
 import type { NavItem } from '@/types';
-import { BookOpen, ClipboardList, Folder, Group, LayoutGrid, MessageCircle, Package, ReceiptPoundSterling, ShoppingCart } from 'lucide-react';
+import { BookOpen, Building, Folder, Group, LayoutGrid, MessageCircle, Package, ReceiptPoundSterling } from 'lucide-react';
 
 export const mainNavItems: NavItem[] = [
     {
@@ -46,23 +46,42 @@ export const mainNavItems: NavItem[] = [
         children: [
             {
                 title: 'Daftar Karyawan',
-                routeName: '',
+                routeName: 'dashboard.employees.index',
             },
             {
                 title: 'Akses Karyawan',
-                routeName: '',
+                routeName: 'dashboard.employees-access.index',
             },
         ],
     },
     {
         title: 'Laporan',
-        routeName: '',
+        routeName: 'dashboard.reports.index',
         icon: ReceiptPoundSterling,
     },
     {
         title: 'Pesan',
-        routeName: '',
+        routeName: 'messaging.index',
         icon: MessageCircle,
+    },
+    {
+        title: 'Pengaturan',
+        routeName: '',
+        icon: Building,
+        children: [
+            {
+                title: 'Perusahaan',
+                routeName: 'settings.company-profile',
+            },
+            {
+                title: 'Bukti Bayar',
+                routeName: 'settings.receipt',
+            },
+            {
+                title: 'Toko',
+                routeName: 'settings.branches',
+            },
+        ],
     },
 ];
 

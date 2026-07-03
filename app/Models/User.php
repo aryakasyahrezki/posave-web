@@ -3,7 +3,19 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Models\Advance\Messaging\Broadcast;
+use App\Models\Advance\Messaging\Conversation;
+use App\Models\Advance\Messaging\Message;
+use App\Models\Advance\Messaging\Note;
+use App\Models\Auth\Branch;
+use App\Models\Auth\Company;
+use App\Models\Auth\UserProfile;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -11,10 +23,6 @@ class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
-    
-    public const ROLE_ADMIN = 'admin';
-    public const ROLE_CASHIER = 'cashier';
-    public const ROLE_STAFF = 'staff';
 
     /**
      * The attributes that are mass assignable.
@@ -25,7 +33,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role'
+        'company_id',
+        'branch_id',
+        'role',
     ];
 
     /**
@@ -49,5 +59,65 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function branch(): BelongsTo
+    {
+        return $this->belongsTo(Branch::class);
+    }
+
+    public function profile(): HasOne
+    {
+        return $this->hasOne(UserProfile::class);
+    }
+
+    public function isOwner(): bool
+    {
+        return $this->role === 'owner';
+    }
+
+    public function isBranchManager(): bool
+    {
+        return $this->role === 'branch_manager';
+    }
+
+    public function isCashier(): bool
+    {
+        return $this->role === 'cashier';
+    }
+
+    public function isAdvance(): bool
+    {
+        return $this->company?->type === 'advance';
+    }
+
+    public function isLite(): bool
+    {
+        return $this->company?->type === 'lite';
+    }
+    public function conversations(): BelongsToMany
+    {
+        return $this->belongsToMany(Conversation::class, 'conversation_user')
+            ->withPivot('last_read_at')
+            ->withTimestamps();
+    }
+
+    public function messages(): HasMany
+    {
+        return $this->hasMany(Message::class);
+    }
+
+    public function notes(): HasMany
+    {
+        return $this->hasMany(Note::class);
+    }
+
+    public function broadcasts(): HasMany
+    {
+        return $this->hasMany(Broadcast::class);
     }
 }
